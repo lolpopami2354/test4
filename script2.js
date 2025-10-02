@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const playButton = document.getElementById('playButton');
+    const playButton2 = document.getElementById('playButton2');
     const gameFrame = document.getElementById('gameFrame');
     const gameUrl = "https://daniezonmc.github.io/1.20/"; // Replace with the actual game URL
 
