@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const playButton2 = document.getElementById('playButton2');
+    const mincraft = document.getElementById('micraft');
     const gameFrame = document.getElementById('gameFrame');
     const gameUrl = "https://daniezonmc.github.io/1.20/"; // Replace with the actual game URL
 
