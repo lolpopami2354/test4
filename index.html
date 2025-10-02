@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snow Rider</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars if snow goes beyond viewport */
+        }
+        #snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow interaction with elements beneath the snow */
+            z-index: 9999; /* Ensure snow is on top */
+        }
+        #snow-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10000; /* Ensure button is on top */
+        }
+    </style>
+</head>
+<body>
+    <div id="snow-container"></div>
+    <button id="snow-toggle-button">Toggle Snow</button>
+
+    <script src="snow.js"></script> <!-- Link to your snow animation script -->
+    <script>
+        // Your JavaScript to control the snow effect
+        const snowContainer = document.getElementById('snow-container');
+        const toggleButton = document.getElementById('snow-toggle-button');
+        let snowActive = false; // Initial state
+
+        // Function to create and manage snowflakes (you'd put your snow logic here)
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Random duration
+            snowflake.style.opacity = Math.random();
+            snowContainer.appendChild(snowflake);
+
+            // Remove snowflake after it falls
+            snowflake.addEventListener('animationiteration', () => {
+                snowflake.remove();
+                if (snowActive) { // Only create new snowflakes if active
+                    createSnowflake();
+                }
+            });
+        }
+
+        // Function to start snow
+        function startSnow() {
+            snowActive = true;
+            for (let i = 0; i < 50; i++) { // Create initial snowflakes
+                createSnowflake();
+            }
+        }
+
+        // Function to stop snow
+        function stopSnow() {
+            snowActive = false;
+            snowContainer.innerHTML = ''; // Clear all snowflakes
+        }
+
+        toggleButton.addEventListener('click', () => {
+            if (snowActive) {
+                stopSnow();
+                toggleButton.textContent = 'Enable Snow';
+            } else {
+                startSnow();
+                toggleButton.textContent = 'Disable Snow';
+            }
+        });
+
+        // Optional: Start snow on page load initially
+        // startSnow();
+    </script>
+</body>
+</html>
