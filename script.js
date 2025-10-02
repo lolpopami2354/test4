@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const playButton = document.getElementById('playButton');
     const gameFrame = document.getElementById('gameFrame');
-    const gameUrl = "https://lolpopami2354/bubbasfarts/"; // Replace with the actual game URL
+    const gameUrl = "https://www.hoodamath.com/games/snowrider3d.html"; // Replace with the actual game URL
 
     playButton.addEventListener('click', function() {
         // Set the iframe's src to the game URL
