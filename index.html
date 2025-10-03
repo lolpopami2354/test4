@@ -1,35 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Play Snow Rider 3D</title>
   <style>
-    #game-container {
-      display: none;
-      margin-top: 20px;
-    }
-    iframe {
+    #gameFrame {
+      width: 100%;
+      height: 600px;
       border: none;
+      display: none; /* Hide initially */
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <button id="play-button">Play Snow Rider 3D</button>
+  <h1>Snow Rider 3D</h1>
+  <button onclick="launchGame()">Play Game</button>
 
-  <div id="game-container">
-    <iframe src="https://www.hoodamath.com/games/snowrider3d.html"
-            width="800"
-            height="600"
-            allowfullscreen>
-    </iframe>
-  </div>
-
-  <script>
-    document.getElementById("play-button").addEventListener("click", function() {
-      document.getElementById("game-container").style.display = "block";
-      this.style.display = "none";
-    });
-  </script>
-
-</body>
-</html>
+  <!-- Game iframe -->
+  <iframe id="gameFrame" src="https://html5.gamedistribution.com/1e3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a
