@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>bubbas Gramama</title>
   <style>
+    #gameFrame2 {
+      display: none;
+      width: 800px;
+      height: 600px;
+      border: none;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -50,8 +56,11 @@
 </head>
 <body>
 <center>
+  <h1>opposite day</h1>
+  <button onclick="loadGame()">dont play opposite day</button>
   <h1>❄️ Snow Rider 3D</h1>
   <button onclick="launchGame()">Play Snow Rider 3d</button>
+  <iframe id="gameFrame2" src="" allowfullscreen></iframe>
   <iframe id="gameFrame" src="" allowfullscreen></iframe>
 </center>
 
@@ -59,6 +68,13 @@
     function launchGame() {
       const iframe = document.getElementById('gameFrame');
       iframe.src = "https://www.hoodamath.com/games/snowrider3d.html"; // Replace with actual game URL
+      iframe.style.display = "block";
+    }
+  </script>
+  <script>
+    function loadGame() {
+      const iframe = document.getElementById("gameFrame2");
+      iframe.src = "https://www.hoodamath.com/games/oppositeday.html"; // Replace with actual embeddable URL
       iframe.style.display = "block";
     }
   </script>
