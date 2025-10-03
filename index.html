@@ -4,6 +4,24 @@
   <meta charset="UTF-8">
   <title>bubbas Gramama</title>
   <style>
+    #backButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #backButton:hover {
+      background-color: #333;
+    }
+
     #gameFrame2 {
       display: none;
       width: 800px;
@@ -55,6 +73,7 @@
   </style>
 </head>
 <body>
+  <button id="backButton" onclick="goBack()">⬅ Back</button>
 <center>
   <h1>opposite day</h1>
   <button onclick="loadGame()">dont play opposite day</button>
@@ -64,20 +83,29 @@
   <iframe id="gameFrame" src="" allowfullscreen></iframe>
 </center>
 
-  <script>
-    function launchGame() {
-      const iframe = document.getElementById('gameFrame');
-      iframe.src = "https://www.hoodamath.com/games/snowrider3d.html"; // Replace with actual game URL
-      iframe.style.display = "block";
-    }
-  </script>
-  <script>
-    function loadGame() {
-      const iframe = document.getElementById("gameFrame2");
-      iframe.src = "https://www.hoodamath.com/games/oppositeday.html"; // Replace with actual embeddable URL
-      iframe.style.display = "block";
-    }
-  </script>
+  
+<script>
+  function goBack() {
+    document.getElementById("gameFrame").style.display = "none";
+    document.getElementById("gameFrame2").style.display = "none";
+    document.getElementById("backButton").style.display = "none";
+  }
+
+  function launchGame() {
+    const iframe = document.getElementById('gameFrame');
+    iframe.src = "https://www.hoodamath.com/games/snowrider3d.html";
+    iframe.style.display = "block";
+    document.getElementById("backButton").style.display = "inline-block";
+  }
+
+  function loadGame() {
+    const iframe = document.getElementById("gameFrame2");
+    iframe.src = "https://www.hoodamath.com/games/oppositeday.html";
+    iframe.style.display = "block";
+    document.getElementById("backButton").style.display = "inline-block";
+  }
+</script>
+
 
 </body>
 </html>
