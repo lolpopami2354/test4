@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Snow Rider 3D</title>
+  <title>Play Snow Rider 3D</title>
   <style>
-    /* Initially hide the iframe */
     #game-container {
       display: none;
+      margin-top: 20px;
+    }
+    iframe {
+      border: none;
     }
   </style>
 </head>
 <body>
-  <button id="play-game-button">Play Snow Rider 3D</button>
+
+  <button id="play-button">Play Snow Rider 3D</button>
 
   <div id="game-container">
-    <center>
-      <iframe src="https://www.hoodamath.com/games/snowrider3d.html#gsc.tab=0"
-              width="800"
-              height="600"
-              frameborder="0"
-              allowfullscreen>
-      </iframe>
-    </center>
+    <iframe src="https://www.hoodamath.com/games/snowrider3d.html"
+            width="800"
+            height="600"
+            allowfullscreen>
+    </iframe>
   </div>
 
   <script>
-    // JavaScript to handle button click
-    document.getElementById("play-game-button").addEventListener("click", function() {
-      document.getElementById("game-container").style.display = "block"; // Show the game
-      this.style.display = "none"; // Hide the play button
+    document.getElementById("play-button").addEventListener("click", function() {
+      document.getElementById("game-container").style.display = "block";
+      this.style.display = "none";
     });
   </script>
+
 </body>
 </html>
