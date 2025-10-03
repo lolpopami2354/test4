@@ -1,50 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snow Rider 3D Game</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding-top: 50px;
-        }
-        iframe {
-            margin-top: 20px;
-            border: 2px solid #ccc;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    </style>
+<title>Snow Rider 3D</title>
+<style>
+  /* Initially hide the iframe */
+  #game-container {
+    display: none;
+  }
+</style>
 </head>
 <body>
 
-    <h1>Play Snow Rider 3D</h1>
+  <button id="play-game-button">Play Snow Rider 3D</button>
 
-    <button id="startGameButton">Start Game</button>
+  <div id="game-container">
+    <!-- Paste the iframe code from GameDistribution here -->
+    <iframe src="<<!nav>>https://www.hoodamath.com/games/snowrider3d.html#gsc.tab=0<<!/nav>>"
 
-    <iframe id="gameFrame"
-            src="https://www.hoodamath.com/games/snowrider3d.html"
-            width="960"
+            width="800"
             height="600"
-            scrolling="none"
             frameborder="0"
-            style="display: none;">
+            allowfullscreen>
     </iframe>
+  </div>
 
-    <script>
-        const startGameButton = document.getElementById('startGameButton');
-        const gameFrame = document.getElementById('gameFrame');
-
-        startGameButton.addEventListener('click', () => {
-            gameFrame.style.display = 'block';
-            startGameButton.style.display = 'none';
-        });
-    </script>
+  <script>
+    // JavaScript to handle button click
+    document.getElementById("play-game-button").addEventListener("click", function() {
+      document.getElementById("game-container").style.display = "block"; // Show the game
+      this.style.display = "none"; // Hide the play button
+    });
+  </script>
 
 </body>
 </html>
