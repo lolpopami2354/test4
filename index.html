@@ -21,10 +21,16 @@
     #backButton:hover {
       background-color: #333;
     }
+    #gameFrame3 {
+      display: none;
+      width: 1200px;
+      height: 600px;
+      border: none;
+    }
 
     #gameFrame2 {
       display: none;
-      width: 800px;
+      width: 1200px;
       height: 600px;
       border: none;
     }
@@ -98,6 +104,12 @@
 
   function launchGame() {
     const iframe = document.getElementById('gameFrame');
+    iframe.src = "https://www.hoodamath.com/games/snowrider3d.html";
+    iframe.style.display = "block";
+    document.getElementById("backButton").style.display = "inline-block";
+  }
+  function launchGame3() {
+    const iframe = document.getElementById('gameFrame3');
     iframe.src = "https://www.hoodamath.com/games/snowrider3d.html";
     iframe.style.display = "block";
     document.getElementById("backButton").style.display = "inline-block";
