@@ -2,25 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Play Snow Rider 3D</title>
+  <title>Snow Rider 3D</title>
   <style>
-    #gameFrame {
-      width: 100%;
-      height: 600px;
-      border: none;
-      display: none; /* Hide initially */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f0f4f8;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.5em;
+      color: #333;
+    }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #0078D4;
+      color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 30px;
+    }
+
+    button:hover {
+      background-color: #005a9e;
+    }
+
+    #gameFrame {
+      width: 80%;
+      height: 600px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
 
-  <h1>Snow Rider 3D</h1>
+  <h1>❄️ Snow Rider 3D</h1>
   <button onclick="launchGame()">Play Game</button>
+  <iframe id="gameFrame" src="" allowfullscreen></iframe>
 
-  <!-- Game iframe -->
-  <iframe id="gameFrame" src="https://html5.gamedistribution.com/1e3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a3b3b6f4c3a9a6f3f3a
+  <script>
+    function launchGame() {
+      const iframe = document.getElementById('gameFrame');
+      iframe.src = "https://example.com/snow-rider-3d"; // Replace with actual game URL
+      iframe.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
