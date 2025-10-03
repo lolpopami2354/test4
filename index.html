@@ -74,6 +74,9 @@
   <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
   <center>
+    <h1>Minecraft</h1>
+    <button onclick="launchGame5()">Play Minecraft</button>
+    
     <h1>!DRIFT HUNTERS!</h1>
     <button onclick="launchGame4()">Play Drift Hunters</button>
     
@@ -90,6 +93,7 @@
     <iframe id="gameFrame2" src="" allowfullscreen></iframe>
     <iframe id="gameFrame3" src="" allowfullscreen></iframe>
     <iframe id="gameFrame4" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame5" src="" allowfullscreen></iframe>
   </center>
 
   <script>
@@ -99,19 +103,27 @@
       document.getElementById("gameFrame3").style.display = "none";
       document.getElementById("gameFrame4").style.display = "none";
       document.getElementById("backButton").style.display = "none";
+      document.getElementById("gameFrame5").style.display = "none";
+    }
+    function launchGame5() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame5');
+      iframe.src = "https://daniezonmc.github.io/1.20/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
     }
 
     function launchGame() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame');
-      iframe.src = "https://www.hoodamath.com/games/snowrider3d.html";
+      const iframe = document.getElementById('gameFrame5');
+      iframe.src = "";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
 
     function launchGame4() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame3');
+      const iframe = document.getElementById('gameFrame4');
       iframe.src = "https://gibbat2.github.io/Games/games/drifthunters/";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
