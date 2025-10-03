@@ -1,27 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Snow Rider 3D</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snow Rider 3D Game</title>
     <style>
-        /* Optional: Style the iframe to be large enough to see the game */
-        iframe {
-            width: 900px; /* Adjust as needed */
-            height: 600px; /* Adjust as needed */
-            border: none; /* Removes the default border */
-            display: none; /* Initially hide the iframe */
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 50px;
         }
-        .visible {
-            display: block; /* Class to make the iframe visible */
+        iframe {
+            margin-top: 20px;
+            border: 2px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <center>
-    <h2>Wellcome to bubbas gramama</h2>
 
-    <button id="playButton">Play Snow Rider 3D</button>
-<iframe id="gameFrame" src="" style="display: none; width: 100%; height: 500px;"></iframe>
-    
+    <h1>Play Snow Rider 3D</h1>
+
+    <button id="startGameButton">Start Game</button>
+
+    <iframe id="gameFrame"
+            src="https://html5.gamedistribution.com/3b79a8537ebc414fb4f9672a9b8c68c8/"
+            width="960"
+            height="600"
+            scrolling="none"
+            frameborder="0"
+            style="display: none;">
+    </iframe>
+
+    <script>
+        const startGameButton = document.getElementById('startGameButton');
+        const gameFrame = document.getElementById('gameFrame');
+
+        startGameButton.addEventListener('click', () => {
+            gameFrame.style.display = 'block';
+            startGameButton.style.display = 'none';
+        });
+    </script>
 
 </body>
 </html>
