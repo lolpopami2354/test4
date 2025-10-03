@@ -74,6 +74,9 @@
   <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
   <center>
+    <h1>!DRIFT HUNTERS!</h1>
+    <button onclick="launchGame4()">Play Drift Hunters</button>
+    
     <h1>Drive Mad!</h1>
     <button onclick="launchGame3()">Play Drive Mad</button>
 
@@ -86,6 +89,7 @@
     <iframe id="gameFrame" src="" allowfullscreen></iframe>
     <iframe id="gameFrame2" src="" allowfullscreen></iframe>
     <iframe id="gameFrame3" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame4" src="" allowfullscreen></iframe>
   </center>
 
   <script>
@@ -93,6 +97,7 @@
       document.getElementById("gameFrame").style.display = "none";
       document.getElementById("gameFrame2").style.display = "none";
       document.getElementById("gameFrame3").style.display = "none";
+      document.getElementById("gameFrame4").style.display = "none";
       document.getElementById("backButton").style.display = "none";
     }
 
@@ -107,7 +112,7 @@
     function launchGame3() {
       hideAllFrames();
       const iframe = document.getElementById('gameFrame3');
-      iframe.src = "https://gibbat2.github.io/Games/games/drivemad/";
+      iframe.src = "https://gibbat2.github.io/Games/games/drifthunters/";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
@@ -119,11 +124,19 @@
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
+    function launchGame4() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame4');
+      iframe.src = "https://gibbat2.github.io/Games/games/drivemad/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+    }
 
     function hideAllFrames() {
       document.getElementById("gameFrame").style.display = "none";
       document.getElementById("gameFrame2").style.display = "none";
       document.getElementById("gameFrame3").style.display = "none";
+      document.getElementById("gameFrame4").style.display = "none";
     }
   </script>
 
