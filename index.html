@@ -74,6 +74,9 @@
   <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
   <center>
+    <h1>Basketball Random</h1>
+    <button onclick="launchGame6()">Play Basketball Random</button>
+    
     <h1>Minecraft</h1>
     <button onclick="launchGame5()">Play Minecraft</button>
     
@@ -105,6 +108,13 @@
       document.getElementById("backButton").style.display = "none";
       document.getElementById("gameFrame5").style.display = "none";
     }
+    function launchGame6() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame6');
+      iframe.src = "https://gibbat2.github.io/Games/games/basketball-random/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+      
     function launchGame5() {
       hideAllFrames();
       const iframe = document.getElementById('gameFrame5');
