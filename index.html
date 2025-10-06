@@ -84,8 +84,11 @@
     <h1>WELCOME to Bubba's Gramama</h1>
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
-    <h1>slope</h1>
-    <button onclick="launchGame10()">Play slope</button>
+    <h1>Crossy Road</h1>
+    <button onclick="launchGame11()">Play Crossy Road</button>
+
+    <h1>Slope</h1>
+    <button onclick="launchGame10()">Play Slope</button>
     
     <h1>Bit Life</h1>
     <button onclick="launchGame9()">Play Bit Life</button>
@@ -124,12 +127,21 @@
     <iframe id="gameFrame8" src="" allowfullscreen></iframe>
     <iframe id="gameFrame9" src="" allowfullscreen></iframe>
     <iframe id="gameFrame10" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame11" src="" allowfullscreen></iframe>
   </div>
 
   <script>
     function goBack() {
       hideAllFrames();
       document.getElementById("backButton").style.display = "none";
+    }
+      
+    function launchGame10() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame10');
+      iframe.src = "https://gibbat2.github.io/Games/games/crossyroad/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
     }
 
     function launchGame10() {
@@ -213,7 +225,7 @@
     }
 
     function hideAllFrames() {
-      for (let i = 0; i <= 10; i++) {
+      for (let i = 0; i <= 11; i++) {
         const frame = document.getElementById(`gameFrame${i === 0 ? '' : i}`);
         if (frame) frame.style.display = "none";
       }
