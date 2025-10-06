@@ -77,6 +77,9 @@
 
     <p> </p>
     <hr>
+    <h1>Subway Surfers</h1>
+    <button onclick="launchGame8()">Play Subway Surfers</button>
+    
     <h1>Stickman Golf</h1>
     <button onclick="launchGame7()">Play Stickman Golf</button>
     
@@ -105,6 +108,7 @@
     <iframe id="gameFrame5" src="" allowfullscreen></iframe>
     <iframe id="gameFrame6" src="" allowfullscreen></iframe>
     <iframe id="gameFrame7" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame8" src="" allowfullscreen></iframe>
   </center>
 
   <script>
@@ -117,11 +121,20 @@
       document.getElementById("gameFrame5").style.display = "none";
       document.getElementById("gameFrame6").style.display = "none";
       document.getElementById("gameFrame7").style.display = "none";
+      document.getElementById("gameFrame8").style.display = "none";
     }
+    function launchGame8() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame8');
+      iframe.src = "https://gibbat2.github.io/Games/games/stickman-golf/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+    }
+    
     function launchGame7() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame6');
-      iframe.src = "https://gibbat2.github.io/Games/games/stickman-golf/";
+      const iframe = document.getElementById('gameFrame7');
+      iframe.src = "https://gibbat2.github.io/Games/games/subway-surfers/";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
@@ -180,6 +193,7 @@
       document.getElementById("gameFrame5").style.display = "none";
       document.getElementById("gameFrame6").style.display = "none";
       document.getElementById("gameFrame7").style.display = "none";
+      document.getElementById("gameFrame8").style.display = "none";
     }
   </script>
 
