@@ -7,19 +7,23 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #4B0082; /* dark purple */
+      background-color: #4B0082;
       font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      padding: 40px 20px;
     }
 
     h1 {
-      margin-bottom: 20px;
-      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-size: 2em;
       color: #fff;
+      text-align: center;
     }
 
     button {
@@ -58,40 +62,43 @@
 
     iframe {
       width: 1200px;
+      max-width: 100%;
       height: 600px;
       border: 2px solid #ccc;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
       display: none;
     }
+
+    img.gif {
+      margin-bottom: 30px;
+      max-width: 100%;
+    }
   </style>
 </head>
 <body>
   <link rel="shortcut icon" type="image/x-icon" href="bubbasgramamaa.png" />
-
   <button id="backButton" onclick="goBack()">⬅ Back</button>
-  
-  <center>
+
+  <div class="container">
     <h1>WELCOME to Bubba's Gramama</h1>
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
-    <p> </p>
-    <hr>
     <h1>Subway Surfers</h1>
-    <button onclick="launchGame8()">Play Subway Surfers</button>
-    
+    <button onclick="launchGame7()">Play Subway Surfers</button>
+
     <h1>Stickman Golf</h1>
-    <button onclick="launchGame7()">Play Stickman Golf</button>
-    
+    <button onclick="launchGame8()">Play Stickman Golf</button>
+
     <h1>Basketball Random</h1>
     <button onclick="launchGame6()">Play Basketball Random</button>
-    
+
     <h1>Minecraft</h1>
     <button onclick="launchGame5()">Play Minecraft</button>
-    
+
     <h1>!DRIFT HUNTERS!</h1>
     <button onclick="launchGame4()">Play Drift Hunters</button>
-    
+
     <h1>Drive Mad!</h1>
     <button onclick="launchGame3()">Play Drive Mad</button>
 
@@ -109,28 +116,14 @@
     <iframe id="gameFrame6" src="" allowfullscreen></iframe>
     <iframe id="gameFrame7" src="" allowfullscreen></iframe>
     <iframe id="gameFrame8" src="" allowfullscreen></iframe>
-  </center>
+  </div>
 
   <script>
     function goBack() {
-      document.getElementById("gameFrame").style.display = "none";
-      document.getElementById("gameFrame2").style.display = "none";
-      document.getElementById("gameFrame3").style.display = "none";
-      document.getElementById("gameFrame4").style.display = "none";
-      document.getElementById("backButton").style.display = "none";
-      document.getElementById("gameFrame5").style.display = "none";
-      document.getElementById("gameFrame6").style.display = "none";
-      document.getElementById("gameFrame7").style.display = "none";
-      document.getElementById("gameFrame8").style.display = "none";
-    }
-    function launchGame8() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame8');
-      iframe.src = "https://gibbat2.github.io/Games/games/stickman-golf/";
-      iframe.style.display = "block";
-      document.getElementById("backButton").style.display = "inline-block";
+      document.getElementById("backButton").style.display = "none";
     }
-    
+
     function launchGame7() {
       hideAllFrames();
       const iframe = document.getElementById('gameFrame7');
@@ -138,6 +131,15 @@
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
+
+    function launchGame8() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame8');
+      iframe.src = "https://gibbat2.github.io/Games/games/stickman-golf/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+    }
+
     function launchGame6() {
       hideAllFrames();
       const iframe = document.getElementById('gameFrame6');
@@ -145,7 +147,7 @@
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
-      
+
     function launchGame5() {
       hideAllFrames();
       const iframe = document.getElementById('gameFrame5');
@@ -156,7 +158,7 @@
 
     function launchGame() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame5');
+      const iframe = document.getElementById('gameFrame3');
       iframe.src = "https://www.hoodamath.com/games/snowrider3d.html";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
@@ -170,32 +172,28 @@
       document.getElementById("backButton").style.display = "inline-block";
     }
 
-    function loadGame() {
-      hideAllFrames();
-      const iframe = document.getElementById("gameFrame2");
-      iframe.src = "https://www.hoodamath.com/games/oppositeday.html";
-      iframe.style.display = "block";
-      document.getElementById("backButton").style.display = "inline-block";
-    }
     function launchGame3() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame4');
+      const iframe = document.getElementById('gameFrame2');
       iframe.src = "https://gibbat2.github.io/Games/games/drivemad/";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
     }
 
+    function loadGame() {
+      hideAllFrames();
+      const iframe = document.getElementById("gameFrame");
+      iframe.src = "https://www.hoodamath.com/games/oppositeday.html";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+    }
+
     function hideAllFrames() {
-      document.getElementById("gameFrame").style.display = "none";
-      document.getElementById("gameFrame2").style.display = "none";
-      document.getElementById("gameFrame3").style.display = "none";
-      document.getElementById("gameFrame4").style.display = "none";
-      document.getElementById("gameFrame5").style.display = "none";
-      document.getElementById("gameFrame6").style.display = "none";
-      document.getElementById("gameFrame7").style.display = "none";
-      document.getElementById("gameFrame8").style.display = "none";
+      for (let i = 0; i <= 8; i++) {
+        const frame = document.getElementById(`gameFrame${i === 0 ? '' : i}`);
+        if (frame) frame.style.display = "none";
+      }
     }
   </script>
-
 </body>
 </html>
