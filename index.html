@@ -74,6 +74,9 @@
   <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
   <center>
+    <h1>Stickman Golf</h1>
+    <button onclick="launchGame7()">Play Stickman Golf</button>
+    
     <h1>Basketball Random</h1>
     <button onclick="launchGame6()">Play Basketball Random</button>
     
@@ -98,6 +101,7 @@
     <iframe id="gameFrame4" src="" allowfullscreen></iframe>
     <iframe id="gameFrame5" src="" allowfullscreen></iframe>
     <iframe id="gameFrame6" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame7" src="" allowfullscreen></iframe>
   </center>
 
   <script>
@@ -109,6 +113,14 @@
       document.getElementById("backButton").style.display = "none";
       document.getElementById("gameFrame5").style.display = "none";
       document.getElementById("gameFrame6").style.display = "none";
+      document.getElementById("gameFrame7").style.display = "none";
+    }
+    function launchGame7() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame6');
+      iframe.src = "https://gibbat2.github.io/Games/games/stickman-golf/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
     }
     function launchGame6() {
       hideAllFrames();
@@ -164,6 +176,7 @@
       document.getElementById("gameFrame4").style.display = "none";
       document.getElementById("gameFrame5").style.display = "none";
       document.getElementById("gameFrame6").style.display = "none";
+      document.getElementById("gameFrame7").style.display = "none";
     }
   </script>
 
