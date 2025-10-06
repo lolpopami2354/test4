@@ -84,6 +84,9 @@
     <h1>WELCOME to Bubba's Gramama</h1>
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
+    <h1>Idle Breakout</h1>
+    <button onclick="launchGame12()">Play Idle Breakout</button>
+
     <h1>Crossy Road</h1>
     <button onclick="launchGame11()">Play Crossy Road</button>
 
@@ -128,6 +131,7 @@
     <iframe id="gameFrame9" src="" allowfullscreen></iframe>
     <iframe id="gameFrame10" src="" allowfullscreen></iframe>
     <iframe id="gameFrame11" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame12" src="" allowfullscreen></iframe>
   </div>
 
   <script>
@@ -135,10 +139,18 @@
       hideAllFrames();
       document.getElementById("backButton").style.display = "none";
     }
+
+    function launchGame12() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame12');
+      iframe.src = "https://gibbat2.github.io/Games/games/idle-breakout/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
+    }
       
     function launchGame11() {
       hideAllFrames();
-      const iframe = document.getElementById('gameFrame10');
+      const iframe = document.getElementById('gameFrame11');
       iframe.src = "https://gibbat2.github.io/Games/games/crossyroad/";
       iframe.style.display = "block";
       document.getElementById("backButton").style.display = "inline-block";
@@ -225,7 +237,7 @@
     }
 
     function hideAllFrames() {
-      for (let i = 0; i <= 11; i++) {
+      for (let i = 0; i <= 12; i++) {
         const frame = document.getElementById(`gameFrame${i === 0 ? '' : i}`);
         if (frame) frame.style.display = "none";
       }
