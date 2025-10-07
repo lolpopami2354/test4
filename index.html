@@ -84,6 +84,9 @@
     <h1>WELCOME to Bubba's Gramama</h1>
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif">
 
+    <h1>Hide and Smash</h1>
+    <button onclick="launchGame14()">Play Hide and Smash</button>
+
     <h1>Pixle Gun 3d</h1>
     <button onclick="launchGame13()">Play Pixle Gun 3d</button>
 
@@ -136,12 +139,21 @@
     <iframe id="gameFrame11" src="" allowfullscreen></iframe>
     <iframe id="gameFrame12" src="" allowfullscreen></iframe>
     <iframe id="gameFrame13" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame14" src="" allowfullscreen></iframe>
   </div>
 
   <script>
     function goBack() {
       hideAllFrames();
       document.getElementById("backButton").style.display = "none";
+    }
+
+    function launchGame14() {
+      hideAllFrames();
+      const iframe = document.getElementById('gameFrame14');
+      iframe.src = "https://gibbat2.github.io/Games/games/hideandsmash/";
+      iframe.style.display = "block";
+      document.getElementById("backButton").style.display = "inline-block";
     }
 
     function launchGame13() {
@@ -249,7 +261,7 @@
     }
 
     function hideAllFrames() {
-      for (let i = 0; i <= 13; i++) {
+      for (let i = 0; i <= 14; i++) {
         const frame = document.getElementById(`gameFrame${i === 0 ? '' : i}`);
         if (frame) frame.style.display = "none";
       }
