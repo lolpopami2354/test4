@@ -20,6 +20,24 @@
    Base Styles
 -------------------------- */
 
+.buy-button.owned {
+  background: linear-gradient(90deg, #ff4444, #cc0000);
+  border: 2px solid #ff4444;
+  color: white;
+  box-shadow:
+    0 0 6px #ff4444,
+    0 0 15px #ff0000;
+  cursor: not-allowed;
+}
+
+.buy-button.owned:hover {
+  transform: none;
+  box-shadow:
+    0 0 8px #ff4444,
+    0 0 16px #cc0000;
+}
+
+
 .buy-button {
   background: linear-gradient(90deg, #00ffff, #008080);
   border: 2px solid #00ffff;
@@ -552,12 +570,27 @@ function updateCoinDisplay() {
   document.getElementById('coinDisplay').textContent = `🪙 ${coins}`;
 }
 
+function updateShopButtons() {
+  Object.keys(ownedGames).forEach(gameId => {
+    if (ownedGames[gameId]) {
+      const button = document.querySelector(`.buy-button[onclick*="${gameId}"]`);
+      if (button) {
+        button.classList.add('owned');
+        button.textContent = "Owned";
+      }
+    }
+  });
+}
+
+
 function toggleShop() {
   const shop = document.getElementById('shopPanel');
   shop.style.display = shop.style.display === 'flex' ? 'none' : 'flex';
 }
 
 function buyGame(gameId, cost) {
+  const button = document.querySelector(`.buy-button[onclick*="${gameId}"]`);
+
   if (ownedGames[gameId]) {
     alert("You already own this game.");
     return;
@@ -569,10 +602,12 @@ function buyGame(gameId, cost) {
     saveData();
     updateCoinDisplay();
     alert(`You bought ${gameId} 🎮!`);
+    updateShopButtons(); // update style
   } else {
     alert("Not enough coins!");
   }
 }
+
 
 function saveData() {
   localStorage.setItem('coins', coins);
