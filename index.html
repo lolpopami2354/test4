@@ -147,6 +147,49 @@ body {
 /* --------------------------
    Background Layers
 -------------------------- */
+
+#dailyRewardBtn, #leaderboardToggle {
+  background: rgba(0,255,255,0.2);
+  color: #00ffff;
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: 0.25s;
+}
+#dailyRewardBtn:hover, #leaderboardToggle:hover {
+  background: rgba(0,255,255,0.4);
+}
+
+.leaderboard-panel {
+  position: fixed;
+  top: 100px;
+  right: 260px;
+  background: rgba(5,5,20,0.95);
+  border: 1px solid rgba(0,255,255,0.2);
+  border-radius: 12px;
+  padding: 16px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 10px 40px rgba(0,255,255,0.08);
+  z-index: 6;
+  width: 220px;
+  animation: dropdown 0.3s ease;
+}
+.leaderboard-panel h3 {
+  color: var(--accent);
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+}
+#leaderboardList {
+  color: var(--muted);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+}
+
+    
 .stars,
 .stars2,
 .nebula {
@@ -430,6 +473,9 @@ iframe {
   <div class="nebula"></div>
 
   <div class="coin-container">
+    <button id="dailyRewardBtn" onclick="claimDailyReward()">🎁 Daily Reward</button>
+    <button id="leaderboardToggle" onclick="toggleLeaderboard()">🏆 Leaderboard</button>
+
     <span id="coinDisplay">🪙 0</span>
     <button id="shopToggle" onclick="toggleShop()">🛒 Shop</button>
   </div>
@@ -440,6 +486,13 @@ iframe {
     <span>Drive Mad</span>
     <button class="buy-button" onclick="buyGame('drivemad', 300)">Buy - 300🪙</button>
   </div>
+
+  <div class="leaderboard-panel" id="leaderboardPanel">
+  <h3>🏆 Top Coin Holders</h3>
+    <div id="leaderboardList"></div>
+    <button onclick="closeLeaderboard()">Close</button>
+  </div>
+  
   <div class="shop-item">
     <span>Hide and Smash</span>
     <button class="buy-button" onclick="buyGame('hideandsmash', 200)">Buy - 200🪙</button>
@@ -642,6 +695,58 @@ updateCoinDisplay(); // Initial load
         checkCode();
       }
     });
+
+  // -------- DAILY REWARD --------
+function claimDailyReward() {
+  const today = new Date().toDateString();
+  const lastClaim = localStorage.getItem('lastDailyClaim');
+  if (lastClaim === today) {
+    alert("You already claimed today's reward! Come back tomorrow.");
+    return;
+  }
+  coins += 250;
+  saveData();
+  localStorage.setItem('lastDailyClaim', today);
+  updateCoinDisplay();
+  alert("🎁 You received 250🪙 for your daily visit!");
+}
+
+// -------- LEADERBOARD --------
+function toggleLeaderboard() {
+  const panel = document.getElementById('leaderboardPanel');
+  if (panel.style.display === 'flex') {
+    panel.style.display = 'none';
+  } else {
+    updateLeaderboard();
+    panel.style.display = 'flex';
+  }
+}
+
+function closeLeaderboard() {
+  document.getElementById('leaderboardPanel').style.display = 'none';
+}
+
+function updateLeaderboard() {
+  let board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+  const name = localStorage.getItem('playerName') || prompt("Enter your name for the leaderboard:") || "Guest";
+  localStorage.setItem('playerName', name);
+
+  // Update or add player entry
+  const existing = board.find(p => p.name === name);
+  if (existing) existing.coins = coins;
+  else board.push({ name, coins });
+
+  // Sort descending by coins
+  board.sort((a,b) => b.coins - a.coins);
+  localStorage.setItem('leaderboard', JSON.stringify(board));
+
+  // Display
+  const list = document.getElementById('leaderboardList');
+  list.innerHTML = board.slice(0, 10).map((p, i) =>
+    `<div>${i+1}. ${p.name} — ${p.coins}🪙</div>`).join('');
+}
+
+    
   </script>
 </body>
 </html>
