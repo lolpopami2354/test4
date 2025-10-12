@@ -2,136 +2,173 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Bubba's Gramama</title>
+  <title>Bubba's Gramama — Admin + Editable Badge + Reset Time + Safe Back Button</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg-mid: #0b0c2a;
-      --accent: #00ffff;
-      --panel: #1a1a3d;
-      --muted: #cfc6ff;
-    }
-
-    /* --- Base --- */
+    :root{--bg-mid:#0b0c2a;--accent:#00ffff;--panel:#1a1a3d;--muted:#cfc6ff}
     html,body{height:100%;margin:0;padding:0;background:
       radial-gradient(ellipse at center,var(--bg-mid) 0%,#000 100%),
       linear-gradient(180deg, rgba(255,255,255,0.02) 0, transparent 100%);
-      color:#fff;font-family:'Segoe UI',system-ui,-apple-system,"Orbitron",sans-serif;overflow-x:hidden;}
+      color:#fff;font-family:'Segoe UI',system-ui,-apple-system,"Orbitron",sans-serif;overflow-x:hidden}
+    .container{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding:40px 20px;max-width:1200px;margin:0 auto}
+    h1.site-title{margin:10px 0 6px;font-size:2rem;color:var(--accent);text-shadow:0 0 12px rgba(0,255,255,0.14),0 6px 30px rgba(0,0,0,0.6);letter-spacing:1px}
 
-    .container{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:40px 20px;max-width:1200px;margin:0 auto;}
-    h1.site-title{margin:10px 0 6px;font-size:2rem;color:var(--accent);text-shadow:0 0 12px rgba(0,255,255,0.14),0 6px 30px rgba(0,0,0,0.6);letter-spacing:1px;}
+    /* User badge (top-left) */
+    .user-badge {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 40;
+      background: linear-gradient(90deg, rgba(0,255,255,0.06), rgba(0,0,0,0.18));
+      border: 1px solid rgba(0,255,255,0.14);
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      box-shadow: 0 6px 26px rgba(0,255,255,0.06);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-width: 220px;
+    }
+    .user-badge .name { font-size: 14px; letter-spacing: 0.5px; cursor: pointer; }
+    .user-badge .time { font-size: 13px; color: rgba(207,198,255,0.9); font-weight:600; }
+    .user-badge input.edit-name { background: var(--panel); color: var(--accent); border: 1px solid rgba(0,255,255,0.06); padding:6px 8px; border-radius:6px; font-family:'Orbitron'; font-weight:700; width:140px; }
 
-    /* --- Coin/shop UI --- */
-    .coin-container{position:fixed;top:20px;right:20px;z-index:6;display:flex;align-items:center;gap:10px}
+    /* top UI */
+    .coin-container{position:fixed;top:20px;right:20px;z-index:14;display:flex;align-items:center;gap:10px}
     #coinDisplay{font-size:18px;background:rgba(0,255,255,0.08);padding:6px 12px;border-radius:8px;color:var(--accent);font-family:'Orbitron';box-shadow:0 0 10px rgba(0,255,255,0.06)}
-    #shopToggle,#dailyRewardBtn,#leaderboardToggle{padding:6px 12px;border-radius:8px;border:none;background:rgba(0,255,255,0.18);cursor:pointer;font-family:'Orbitron';transition:.2s}
+    button.top-btn{padding:6px 12px;border-radius:8px;border:none;background:rgba(0,255,255,0.18);cursor:pointer;font-family:'Orbitron';transition:.2s}
 
-    /* --- Panels --- */
-    .shop-panel,.leaderboard-panel{position:fixed;background:rgba(5,5,20,0.95);border:1px solid rgba(0,255,255,0.18);border-radius:12px;padding:16px;display:none;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,255,255,0.06);z-index:7;width:240px;animation:dropdown .28s ease}
+    /* panels */
+    .panel{position:fixed;background:rgba(5,5,20,0.95);border:1px solid rgba(0,255,255,0.18);border-radius:12px;padding:12px;display:none;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,255,255,0.06);z-index:13;width:320px;animation:dropdown .28s ease}
     .shop-panel{top:70px;right:20px}
-    .leaderboard-panel{top:70px;right:280px}
+    .leaderboard-panel{top:70px;right:360px;width:260px}
+    .admin-panel{top:70px;right:20px;width:640px;max-height:70vh;overflow:auto}
 
     @keyframes dropdown{from{transform:translateY(-12px);opacity:0}to{transform:translateY(0);opacity:1}}
 
     .shop-item{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-family:'Orbitron'}
     .buy-button{background:linear-gradient(90deg,#00ffff,#008080);border:2px solid #00ffff;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:0 0 6px #00ffff;transition:all .18s;font-family:'Orbitron'}
-    .buy-button:hover{transform:scale(1.06)}
-    .buy-button.owned{background:linear-gradient(90deg,#ff4444,#cc0000);border-color:#ff4444;color:#fff;cursor:not-allowed;box-shadow:0 0 8px #ff4444}
+    .buy-button.owned{background:linear-gradient(90deg,#ff4444,#cc0000);border-color:#ff4444;color:#fff;cursor:not-allowed}
 
-    /* --- Leaderboard close button (neon pulse) --- */
+    /* admin table */
+    .admin-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    table.admin-table{width:100%;border-collapse:collapse;font-family:'Orbitron';color:#fff}
+    table.admin-table th, table.admin-table td{border:1px solid rgba(255,255,255,0.06);padding:6px;font-size:14px;text-align:left;background:rgba(255,255,255,0.01)}
+    table.admin-table input[type="text"], table.admin-table input[type="number"]{width:100%;padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:var(--panel);color:var(--accent);font-family:'Orbitron'}
+    .admin-actions{display:flex;gap:8px}
+    .small-btn{padding:6px 10px;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(180deg,#00baba,#00ffff);color:#001;font-weight:700}
+    .danger-btn{background:linear-gradient(180deg,#ff6666,#ff3333);color:#fff}
+
+    /* leaderboard close btn (neon pulse) */
     @keyframes pulseGlow{0%,100%{box-shadow:0 0 10px rgba(255,0,0,0.35),0 0 20px rgba(255,0,0,0.25)}50%{box-shadow:0 0 22px rgba(255,0,0,0.6),0 0 36px rgba(255,0,0,0.45)}}
     .leaderboard-panel .close-btn{margin-top:8px;padding:10px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#ff4444,#cc0000);color:#fff;font-family:'Orbitron';cursor:pointer;animation:pulseGlow 2s infinite}
     .leaderboard-panel .close-btn:hover{transform:translateY(-2px) scale(1.04)}
 
-    /* --- Games --- */
+    /* games & iframe */
     .game-block{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 16px;margin-bottom:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.005));border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
     .game-block h2{margin:0;font-size:1.05rem;color:var(--muted)}
-    .game-block button.play-btn{padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer;font-family:'Orbitron'}
-
-    #backButton{position:fixed;top:20px;left:20px;padding:10px 18px;border-radius:8px;border:none;background:rgba(85,85,85,0.9);color:#fff;display:none;z-index:6}
-
+    .game-block button.play-btn{padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer}
+    #backButton{position:fixed;left:20px;padding:10px 18px;border-radius:8px;border:none;background:rgba(85,85,85,0.9);color:#fff;display:none;z-index:30}
     iframe{width:1200px;max-width:100%;height:600px;border-radius:10px;border:2px solid rgba(255,255,255,0.06);box-shadow:0 10px 50px rgba(0,0,0,0.7);display:none;margin-top:20px;z-index:2}
 
-    /* --- Access panel --- */
-    .access-panel{width:100%;max-width:760px;margin:18px 0;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(10,12,30,0.6),rgba(14,10,30,0.35));border:1px solid rgba(0,255,255,0.06);display:flex;flex-direction:column;align-items:center;gap:12px}
-    .code-row{display:flex;gap:12px;width:100%;justify-content:center;align-items:center}
-    #codeInput{flex:1;padding:12px 14px;border-radius:8px;border:none;background:var(--panel);color:var(--accent);font-family:'Orbitron';text-align:center}
-    .submit-btn{padding:10px 14px;border-radius:8px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer;font-family:'Orbitron'}
+    /* stars */
+    .stars,.stars2,.nebula{position:fixed;top:0;left:0;width:200%;height:200%;pointer-events:none;z-index:0;transform:translate(-25%,-25%);mix-blend-mode:screen}
+    .stars::after{content:"";position:absolute;width:2px;height:2px;background:white;box-shadow:50px 100px white,200px 300px white,400px 150px white,600px 250px white,800px 100px white;animation:twinkle 2.5s infinite ease-in-out}
+    .stars2::after{content:"";position:absolute;width:1px;height:1px;background:#aaf0ff;box-shadow:120px 80px #aaf0ff,320px 240px #aaf0ff;opacity:0.6;animation:twinkle2 3.5s infinite ease-in-out}
+    @keyframes twinkle{0%,100%{opacity:.9}50%{opacity:.3}} @keyframes twinkle2{0%,100%{opacity:.6}50%{opacity:.2}}
+    .nebula{background:radial-gradient(600px 300px at 10% 10%, rgba(0,200,255,0.06), transparent 10%),radial-gradient(500px 260px at 80% 70%, rgba(180,0,255,0.04), transparent 8%);opacity:.9;mix-blend-mode:overlay}
 
-    /* --- Stars & shooting star styles --- */
-    .stars, .stars2, .nebula { position:fixed; top:0; left:0; width:200%; height:200%; pointer-events:none; z-index:0; transform:translate(-25%,-25%); mix-blend-mode:screen; }
-    .stars::after{ content:""; position:absolute; width:2px;height:2px;background:white;
-      box-shadow: 50px 100px white, 200px 300px white, 400px 150px white, 600px 250px white, 800px 100px white, 1000px 200px white, 1200px 50px white, 1400px 350px white, 1600px 220px white, 1800px 120px white;
-      animation:twinkle 2.5s infinite ease-in-out;
-    }
-    .stars2::after{ content:""; position:absolute; width:1px;height:1px;background:#aaf0ff;
-      box-shadow: 120px 80px #aaf0ff, 320px 240px #aaf0ff, 720px 150px #aaf0ff, 920px 450px #aaf0ff, 1320px 100px #aaf0ff, 1720px 300px #aaf0ff;
-      opacity:0.6; animation:twinkle2 3.5s infinite ease-in-out;
-    }
-    @keyframes twinkle{0%,100%{opacity:0.9}50%{opacity:0.3}}
-    @keyframes twinkle2{0%,100%{opacity:0.6}50%{opacity:0.2}}
+    /* shooting star base class */
+    .shooting-star{pointer-events:none;z-index:0;border-radius:2px;position:absolute;display:block}
 
-    .nebula { background:
-      radial-gradient(600px 300px at 10% 10%, rgba(0,200,255,0.06), transparent 10%),
-      radial-gradient(500px 260px at 80% 70%, rgba(180,0,255,0.04), transparent 8%);
-      opacity:0.9; mix-blend-mode:overlay; z-index:0; pointer-events:none; }
+    /* admin login modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:20}
+    .modal{background:linear-gradient(180deg,rgba(10,12,30,0.96),rgba(14,10,30,0.95));padding:18px;border-radius:12px;border:1px solid rgba(0,255,255,0.06);width:360px;max-width:96%;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+    .modal h4{margin:0 0 8px;color:var(--accent);font-family:'Orbitron'}
+    .modal input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:var(--panel);color:var(--accent);margin-bottom:8px}
+    .modal .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 
-    /* shooting star base (clones will be absolute) */
-    .shooting-star { position:absolute; pointer-events:none; z-index:0; border-radius:2px; background:linear-gradient(-45deg, rgba(255,255,255,1), rgba(255,255,255,0.15)); opacity:0; }
-
-    /* responsive */
-    @media(max-width:820px){ iframe{height:80vh} .game-block{flex-direction:column;align-items:stretch} .code-row{flex-direction:column} .leaderboard-panel{right:20px;top:140px} }
+    .admin-note{font-size:13px;color:var(--muted);font-family:'Orbitron'}
+    @media(max-width:900px){ .admin-panel{right:10px;left:10px;width:auto} iframe{height:80vh} }
   </style>
 </head>
 <body>
-  <!-- STAR LAYERS -->
-  <div class="stars"></div>
-  <div class="stars2"></div>
-  <div class="nebula"></div>
+  <div class="stars"></div><div class="stars2"></div><div class="nebula"></div>
 
-  <!-- UI -->
+  <!-- User badge (top-left) -->
+  <div id="userBadge" class="user-badge" aria-live="polite">
+    <div class="name" id="userName" title="Click to edit name">Guest</div>
+    <div class="time" id="userTime">00:00:00</div>
+  </div>
+
   <div class="coin-container">
-    <button id="dailyRewardBtn" onclick="claimDailyReward()">🎁 Daily Reward</button>
-    <button id="leaderboardToggle" onclick="toggleLeaderboard()">🏆 Leaderboard</button>
+    <button id="dailyRewardBtn" class="top-btn" onclick="claimDailyReward()">🎁 Daily Reward</button>
+    <button id="leaderboardToggle" class="top-btn" onclick="toggleLeaderboard()">🏆 Leaderboard</button>
     <span id="coinDisplay">🪙 0</span>
-    <button id="shopToggle" onclick="toggleShop()">🛒 Shop</button>
+    <button id="shopToggle" class="top-btn" onclick="toggleShop()">🛒 Shop</button>
+    <button id="adminToggle" class="top-btn" onclick="onAdminToggleClick()">📋 Admin</button>
   </div>
 
-  <div class="shop-panel" id="shopPanel" aria-hidden="true">
+  <div class="panel shop-panel" id="shopPanel" aria-hidden="true">
     <h3>Game Shop</h3>
-    <div class="shop-item">
-      <span>Drive Mad</span>
-      <button class="buy-button" data-game="drivemad" data-cost="300" onclick="buyGame('drivemad',300)">Buy - 300🪙</button>
-    </div>
-    <div class="shop-item">
-      <span>Hide and Smash</span>
-      <button class="buy-button" data-game="hideandsmash" data-cost="200" onclick="buyGame('hideandsmash',200)">Buy - 200🪙</button>
-    </div>
+    <div class="shop-item"><span>Drive Mad</span><button class="buy-button" data-game="drivemad" data-cost="300" onclick="buyGame('drivemad',300)">Buy - 300🪙</button></div>
+    <div class="shop-item"><span>Hide and Smash</span><button class="buy-button" data-game="hideandsmash" data-cost="200" onclick="buyGame('hideandsmash',200)">Buy - 200🪙</button></div>
   </div>
 
-  <div class="leaderboard-panel" id="leaderboardPanel" aria-hidden="true">
+  <div class="panel leaderboard-panel" id="leaderboardPanel" aria-hidden="true">
     <h3>🏆 Top Coin Holders</h3>
-    <div id="leaderboardList" style="max-height:260px;overflow:auto;"></div>
+    <div id="leaderboardList" style="max-height:260px;overflow:auto"></div>
     <button class="close-btn" onclick="closeLeaderboard()">Close</button>
+  </div>
+
+  <div class="panel admin-panel" id="adminPanel" aria-hidden="true">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3>Admin Spreadsheet — Edit Players' Coins & Time</h3>
+      <div><button class="small-btn" onclick="adminLogout()" title="Log out admin session">Log out</button></div>
+    </div>
+
+    <div class="admin-controls">
+      <div class="admin-actions">
+        <button class="small-btn" onclick="adminAddRow()">+ Add Row</button>
+        <button class="small-btn" onclick="adminSave()">Save Changes</button>
+        <button class="small-btn" onclick="adminExportCSV()">Export CSV</button>
+        <button class="small-btn danger-btn" onclick="adminResetAllTimes()">Reset All Times</button>
+        <label style="display:inline-block">
+          <input id="adminImportFile" type="file" accept=".csv" style="display:none" onchange="adminImportCSV(this)">
+          <button class="small-btn" onclick="document.getElementById('adminImportFile').click()">Import CSV</button>
+        </label>
+      </div>
+    </div>
+
+    <div style="overflow:auto;max-height:48vh">
+      <table class="admin-table" id="adminTable">
+        <thead><tr><th>#</th><th>Player Name</th><th>Coins</th><th>Time (total)</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="admin-note">Tip: CSV format = name,coins — import will replace/add rows. Press Save to persist changes to localStorage. Use Reset Time to zero a student's cumulative time.</div>
   </div>
 
   <button id="backButton" onclick="goBack()">⬅ Back</button>
 
   <div class="container">
     <h1 class="site-title">WELCOME to Bubba's Gramama</h1>
-    <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="Funny gif" style="max-width:90%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6)">
+    <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="gif" style="max-width:90%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6)">
 
-    <div class="access-panel" aria-label="Galactic access panel">
+    <div class="access-panel" aria-label="Galactic access panel" style="width:100%;max-width:760px;margin:18px 0;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(10,12,30,0.6),rgba(14,10,30,0.35));border:1px solid rgba(0,255,255,0.06);display:flex;flex-direction:column;align-items:center;gap:12px">
       <h3>Enter Access Code</h3>
-      <div class="code-row">
-        <input id="codeInput" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="• • • •" aria-label="Access code">
-        <button class="submit-btn" onclick="checkCode()">Submit</button>
+      <div class="code-row" style="display:flex;gap:12px;width:100%;justify-content:center;align-items:center">
+        <input id="codeInput" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="• • • •" aria-label="Access code" style="flex:1;padding:12px 14px;border-radius:8px;border:none;background:var(--panel);color:var(--accent);font-family:'Orbitron';text-align:center"/>
+        <button class="submit-btn" onclick="checkCode()" style="padding:10px 14px;border-radius:8px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer;font-family:'Orbitron'">Submit</button>
       </div>
-      <button id="unlockButton" style="display:none;" onclick="launchGame('secret')">🚀 Launch Sequence Activated</button>
+      <button id="unlockButton" style="display:none;padding:10px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffd48f,#ff9e3b);cursor:pointer">🚀 Launch Sequence Activated</button>
     </div>
 
-    <!-- Full game list -->
+    <!-- games -->
     <div class="game-block"><h2>Hide and Smash</h2><button class="play-btn" onclick="launchGame('hideandsmash')">Play Hide and Smash</button></div>
     <div class="game-block"><h2>Pixle Gun 3d</h2><button class="play-btn" onclick="launchGame('pixelgun')">Play Pixle Gun 3d</button></div>
     <div class="game-block"><h2>Idle Breakout</h2><button class="play-btn" onclick="launchGame('idle-breakout')">Play Idle Breakout</button></div>
@@ -150,8 +187,33 @@
     <iframe id="gameFrame" src="" allowfullscreen></iframe>
   </div>
 
+  <!-- admin login modal -->
+  <div class="modal-backdrop" id="adminModalBackdrop" role="dialog" aria-modal="true" style="display:none">
+    <div class="modal" role="document">
+      <h4>Admin Login</h4>
+      <div id="adminLoginMessage" style="color:var(--muted);margin-bottom:8px">Enter admin email and password to open the Admin panel.</div>
+      <input id="adminEmailInput" type="email" placeholder="Admin email" aria-label="Admin email" />
+      <input id="adminPasswordInput" type="password" placeholder="Password" aria-label="Admin password" />
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div id="adminAttemptsInfo" style="color:var(--muted);font-size:13px"></div>
+        <div class="modal-actions">
+          <button class="small-btn" onclick="closeAdminModal()">Cancel</button>
+          <button class="small-btn" onclick="checkAdminCredentials()">Log in</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // --- URLs ---
+    /* ---------------------------
+       Config (edit here)
+    --------------------------- */
+    const ADMIN_EMAIL = 'bywhitley@s.sfusd.edu'.toLowerCase();
+    const ADMIN_PASSWORD = 'BubbaAdmin2025!'; // change before sharing
+    const ADMIN_MAX_ATTEMPTS = 5;
+    const ADMIN_LOCK_MS = 60 * 1000; // 60 seconds lock after too many failed attempts
+
+    /* ---------- state & helpers ---------- */
     const gameURLs = {
       'hideandsmash': "https://gibbat2.github.io/Games/games/hideandsmash/",
       'pixelgun': "https://gibbat2.github.io/Games/games/pixelgun/",
@@ -170,189 +232,658 @@
       'secret': "https://helios-blue.vercel.app/?sca_esv=fe0ebb4ec3b321c8&ie=ISO-8859-1&q=hello"
     };
 
-    // --- state --- 
+    // Coins & owned games
     let coins = parseInt(localStorage.getItem('coins') || '0', 10);
     let ownedGames = JSON.parse(localStorage.getItem('ownedGames') || '{}');
 
-    // --- helpers ---
-    function saveData(){
-      localStorage.setItem('coins', String(coins));
-      localStorage.setItem('ownedGames', JSON.stringify(ownedGames));
-    }
+    function saveData(){ localStorage.setItem('coins', String(coins)); localStorage.setItem('ownedGames', JSON.stringify(ownedGames)); }
+    function updateCoinDisplay(){ document.getElementById('coinDisplay').textContent = `🪙 ${coins}`; }
+    function updateShopButtons(){ document.querySelectorAll('.buy-button').forEach(btn=>{ const gid = btn.dataset.game; const cost = btn.dataset.cost || ''; if (gid && ownedGames[gid]) { btn.classList.add('owned'); btn.textContent = 'Owned'; btn.disabled = true; } else { btn.classList.remove('owned'); btn.disabled = false; btn.textContent = cost ? `Buy - ${cost}🪙` : 'Buy'; } }); }
 
-    function updateCoinDisplay(){
-      document.getElementById('coinDisplay').textContent = `🪙 ${coins}`;
-    }
-
-    function updateShopButtons(){
-      document.querySelectorAll('.buy-button').forEach(btn=>{
-        const gid = btn.dataset.game;
-        if (gid && ownedGames[gid]) {
-          btn.classList.add('owned');
-          btn.textContent = 'Owned';
-          btn.disabled = true;
-        } else {
-          // restore text from dataset if present
-          const cost = btn.dataset.cost || '';
-          btn.classList.remove('owned');
-          btn.disabled = false;
-          btn.textContent = cost ? `Buy - ${cost}🪙` : 'Buy';
+    // ---------------- Time storage per-user ----------------
+    // Storage key: 'timeSpentByUser' => JSON object { "Alice": 1234, "Bob": 5678 }
+    function loadTimeMapping() {
+      try {
+        const raw = localStorage.getItem('timeSpentByUser');
+        if (!raw) {
+          // backward compatibility: if old flat key exists, migrate it to current player
+          const legacy = localStorage.getItem('timeSpentSeconds');
+          if (legacy) {
+            const val = parseInt(legacy, 10) || 0;
+            const name = localStorage.getItem('playerName') || 'Guest';
+            const map = {};
+            map[name] = val;
+            localStorage.setItem('timeSpentByUser', JSON.stringify(map));
+            localStorage.removeItem('timeSpentSeconds');
+            return map;
+          }
+          return {};
         }
-      });
+        return JSON.parse(raw || '{}');
+      } catch (e) {
+        return {};
+      }
+    }
+    function saveTimeMapping(map) {
+      localStorage.setItem('timeSpentByUser', JSON.stringify(map || {}));
     }
 
-    // --- initial UI setup ---
-    updateCoinDisplay();
-    updateShopButtons();
-
-    // give 250 coins after 60s for visiting (non-blocking)
-    setTimeout(()=>{ coins += 250; saveData(); updateCoinDisplay(); if (document.visibilityState !== 'hidden') { alert("You earned 250 🪙 for visiting!"); } }, 60000);
-
-    // --- shop ---
-    function toggleShop(){
-      const p = document.getElementById('shopPanel');
-      p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
-      p.setAttribute('aria-hidden', p.style.display === 'none');
+    function getPlayerName() {
+      return (localStorage.getItem('playerName') || '').trim() || null;
     }
 
-    function buyGame(gameId, cost){
-      if (ownedGames[gameId]) { alert("You already own this game."); return; }
-      if (coins >= cost) {
-        coins -= cost;
-        ownedGames[gameId] = true;
-        saveData();
-        updateCoinDisplay();
-        updateShopButtons();
-        alert(`You bought ${gameId} 🎮!`);
-      } else {
-        alert("Not enough coins!");
+    // If no playerName set, prompt once.
+    function ensurePlayerName() {
+      let name = getPlayerName();
+      if (!name) {
+        name = prompt("Enter your name (this will appear on the leaderboard and top-left badge):", "Guest") || "Guest";
+        localStorage.setItem('playerName', name);
+      }
+      updateUserBadgeName();
+    }
+
+    // ---------- USER BADGE & CUMULATIVE TIME ----------
+    let sessionStart = Date.now();
+    let sessionTimerInterval = null;
+
+    function formatDuration(seconds) {
+      seconds = Math.max(0, Math.floor(seconds));
+      const days = Math.floor(seconds / 86400);
+      seconds = seconds % 86400;
+      const hrs = Math.floor(seconds / 3600);
+      seconds = seconds % 3600;
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      if (days > 0) return `${days}d ${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      return `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+    }
+
+    function getStoredSecondsForName(name) {
+      const map = loadTimeMapping();
+      return Number(map[name] || 0);
+    }
+
+    function setStoredSecondsForName(name, seconds) {
+      const map = loadTimeMapping();
+      map[name] = Math.max(0, Math.floor(seconds));
+      saveTimeMapping(map);
+    }
+
+    function addSecondsToName(name, secondsToAdd) {
+      const map = loadTimeMapping();
+      map[name] = Math.max(0, Math.floor((map[name] || 0) + secondsToAdd));
+      saveTimeMapping(map);
+    }
+
+    function getTotalSecondsForCurrentUser() {
+      const name = getPlayerName() || 'Guest';
+      const stored = getStoredSecondsForName(name);
+      const elapsedThisSession = Math.floor((Date.now() - sessionStart) / 1000);
+      return stored + elapsedThisSession;
+    }
+
+    function updateUserBadgeName() {
+      const name = getPlayerName() || 'Guest';
+      const elem = document.getElementById('userName');
+      // If element exists and is input or div, set its text/value appropriately
+      if (elem) elem.textContent = name;
+      // reflect in localStorage if not set (should be kept in sync)
+      if (localStorage.getItem('playerName') !== name) localStorage.setItem('playerName', name);
+      // update leaderboard UI when name changes
+      updateLeaderboard();
+      // reposition back button in case badge size changed
+      positionBackButton();
+    }
+
+    function updateUserBadgeTime() {
+      const total = getTotalSecondsForCurrentUser();
+      document.getElementById('userTime').textContent = formatDuration(total);
+    }
+
+    function startUserTimer() {
+      if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+      sessionStart = Date.now();
+      updateUserBadgeTime();
+      sessionTimerInterval = setInterval(updateUserBadgeTime, 1000);
+    }
+
+    // persist session seconds on unload for current player
+    function persistSessionTimeOnUnload() {
+      try {
+        const name = getPlayerName() || 'Guest';
+        const sessionSec = Math.floor((Date.now() - sessionStart) / 1000);
+        addSecondsToName(name, sessionSec);
+      } catch (e) {
+        // ignore
       }
     }
 
-    // --- launch / iframe ---
+    // storage event cross-tab
+    window.addEventListener('storage', (ev) => {
+      if (ev.key === 'playerName') updateUserBadgeName();
+      if (ev.key === 'timeSpentByUser') updateUserBadgeTime();
+    });
+
+    // make the badge name clickable/editable
+    function attachBadgeEditHandlers() {
+      const existing = document.getElementById('userName');
+      if (!existing) return;
+      existing.onclick = null; // avoid duplicate handlers
+      existing.addEventListener('click', () => {
+        // transform into input
+        const oldName = getPlayerName() || 'Guest';
+        const input = document.createElement('input');
+        input.className = 'edit-name';
+        input.value = oldName;
+        input.title = 'Press Enter to save, Escape to cancel';
+        existing.replaceWith(input);
+        input.focus();
+        // select text
+        input.setSelectionRange(0, input.value.length);
+
+        function finish(save) {
+          const newNameRaw = input.value.trim() || 'Guest';
+          const newName = newNameRaw;
+          const parent = input.parentElement;
+          const span = document.createElement('div');
+          span.id = 'userName';
+          span.className = 'name';
+          span.textContent = newName;
+          // replace input with span
+          input.replaceWith(span);
+          // reattach handler
+          attachBadgeEditHandlers();
+          if (save) {
+            // transfer time mapping from oldName to newName (merge if needed)
+            if (oldName !== newName) {
+              const map = loadTimeMapping();
+              const oldSeconds = Number(map[oldName] || 0);
+              const newSeconds = Number(map[newName] || 0);
+              map[newName] = Math.max(0, oldSeconds + newSeconds);
+              // delete old key
+              if (map.hasOwnProperty(oldName)) delete map[oldName];
+              saveTimeMapping(map);
+              // update stored playerName
+              localStorage.setItem('playerName', newName);
+              // update leaderboard names (rename entries matching oldName -> newName)
+              const board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+              let updated = false;
+              for (const p of board) {
+                if (p.name === oldName) { p.name = newName; updated = true; }
+              }
+              if (updated) localStorage.setItem('leaderboard', JSON.stringify(board));
+              // reflect UI
+              updateUserBadgeName();
+              updateUserBadgeTime();
+              updateLeaderboard();
+              // notify other tabs via storage events
+              localStorage.setItem('timeSpentByUser', JSON.stringify(loadTimeMapping()));
+              localStorage.setItem('playerName', newName);
+            }
+          } else {
+            // cancelled -> nothing else
+            updateUserBadgeName();
+          }
+          // reposition back button after edit
+          positionBackButton();
+        }
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { finish(true); }
+          else if (e.key === 'Escape') { finish(false); }
+        });
+        input.addEventListener('blur', () => finish(true));
+      });
+    }
+
+    // Keep Back button below the profile badge so they don't overlap
+    function positionBackButton() {
+      const badge = document.getElementById('userBadge');
+      const back = document.getElementById('backButton');
+      if (!badge || !back) return;
+
+      // get bounding rect relative to viewport
+      const rect = badge.getBoundingClientRect();
+
+      // desired gap (px) between badge bottom and back button top
+      const GAP = 8;
+
+      // compute new top: badge bottom + gap
+      const finalTop = Math.max(8, Math.round(rect.bottom + GAP));
+
+      back.style.top = finalTop + 'px';
+      // ensure left is kept at 20 (consistent with CSS)
+      back.style.left = '20px';
+    }
+
+    // initialize user badge
+    function initUserBadge() {
+      ensurePlayerName();
+      startUserTimer();
+      attachBadgeEditHandlers();
+      // initial position update for back button
+      positionBackButton();
+      window.addEventListener('beforeunload', persistSessionTimeOnUnload);
+      window.addEventListener('pagehide', persistSessionTimeOnUnload);
+      // update position on resize (badge may reflow)
+      window.addEventListener('resize', positionBackButton);
+    }
+
+    // ---------- rest of site logic ----------
+    updateCoinDisplay(); updateShopButtons();
+
+    // Give 250 coins after 60 seconds for visit
+    setTimeout(()=>{ coins += 250; saveData(); updateCoinDisplay(); if (document.visibilityState !== 'hidden') alert("You earned 250 🪙 for visiting!"); }, 60000);
+
+    /* shop / buy */
+    function toggleShop(){ const p=document.getElementById('shopPanel'); p.style.display = (p.style.display==='flex') ? 'none' : 'flex'; p.setAttribute('aria-hidden', p.style.display==='none'); }
+    function buyGame(gid,cost){ if (ownedGames[gid]) { alert("You already own this game."); return; } if (coins >= cost) { coins -= cost; ownedGames[gid] = true; saveData(); updateCoinDisplay(); updateShopButtons(); alert(`You bought ${gid} 🎮!`); } else alert("Not enough coins!"); }
+
+    /* iframe */
     function launchGame(id){
-      // if some shop-protected games, require ownership
       const shopProtected = ['drivemad','hideandsmash'];
       if (shopProtected.includes(id) && !ownedGames[id]) {
         alert("You need to buy this game first 🛒");
         return;
       }
       const src = gameURLs[id];
-      if (!src) { console.warn('Missing url for', id); return; }
+      if (!src) {
+        console.warn('Missing url for', id);
+        return;
+      }
       const iframe = document.getElementById('gameFrame');
       iframe.src = src;
       iframe.style.display = 'block';
-      document.getElementById('backButton').style.display = 'inline-block';
+
+      // show and position back button under badge
+      const backBtn = document.getElementById('backButton');
+      backBtn.style.display = 'inline-block';
+      positionBackButton();
+
       window.scrollTo({ top: iframe.offsetTop - 20, behavior: 'smooth' });
     }
-
     function goBack(){
       const iframe = document.getElementById('gameFrame');
       iframe.style.display = 'none';
       iframe.src = '';
-      document.getElementById('backButton').style.display = 'none';
+      const backBtn = document.getElementById('backButton');
+      backBtn.style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- daily reward ---
-    function claimDailyReward(){
-      const today = new Date().toDateString();
-      const last = localStorage.getItem('lastDailyClaim');
-      if (last === today) { alert("You already claimed today's reward! Come back tomorrow."); return; }
-      coins += 250;
-      saveData();
-      updateCoinDisplay();
-      localStorage.setItem('lastDailyClaim', today);
-      alert("🎁 You received 250🪙 for your daily visit!");
-    }
+    /* daily reward */
+    function claimDailyReward(){ const today = new Date().toDateString(); const last = localStorage.getItem('lastDailyClaim'); if (last === today) { alert("You already claimed today's reward! Come back tomorrow."); return; } coins += 250; saveData(); updateCoinDisplay(); localStorage.setItem('lastDailyClaim', today); alert("🎁 You received 250🪙 for your daily visit!"); }
 
-    // --- leaderboard ---
-    function toggleLeaderboard(){
-      const p = document.getElementById('leaderboardPanel');
-      if (p.style.display === 'flex') { p.style.display = 'none'; p.setAttribute('aria-hidden','true'); }
-      else { updateLeaderboard(); p.style.display = 'flex'; p.setAttribute('aria-hidden','false'); }
-    }
-    function closeLeaderboard(){ const p = document.getElementById('leaderboardPanel'); p.style.display='none'; p.setAttribute('aria-hidden','true'); }
+    /* leaderboard */
+    function toggleLeaderboard(){ const p = document.getElementById('leaderboardPanel'); if (p.style.display === 'flex') { p.style.display = 'none'; p.setAttribute('aria-hidden','true'); } else { updateLeaderboard(); p.style.display = 'flex'; p.setAttribute('aria-hidden','false'); } }
+    function closeLeaderboard(){ document.getElementById('leaderboardPanel').style.display = 'none'; document.getElementById('leaderboardPanel').setAttribute('aria-hidden','true'); }
+
     function updateLeaderboard(){
       let board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-      const name = localStorage.getItem('playerName') || (prompt("Enter your name for the leaderboard:") || "Guest");
+      const name = localStorage.getItem('playerName') || prompt("Enter your name for the leaderboard:") || "Guest";
       localStorage.setItem('playerName', name);
+
       const existing = board.find(p => p.name === name);
       if (existing) existing.coins = coins;
       else board.push({ name, coins });
+
       board.sort((a,b) => b.coins - a.coins);
       localStorage.setItem('leaderboard', JSON.stringify(board));
+
       const list = document.getElementById('leaderboardList');
-      list.innerHTML = board.slice(0,10).map((p,i) => `<div>${i+1}. ${p.name} — ${p.coins}🪙</div>`).join('');
+      list.innerHTML = board.slice(0, 10).map((p, i) =>
+        `<div>${i+1}. ${p.name} — ${p.coins}🪙</div>`).join('');
     }
 
-    // --- access code ---
-    function checkCode(){
-      const input = document.getElementById('codeInput').value.trim();
-      const btn = document.getElementById('unlockButton');
-      if (input === '2354') {
-        btn.style.display = 'inline-block';
-        // small pop animation
-        btn.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' });
-        // hide after 10s
-        clearTimeout(window._unlockHideTimeout);
-        window._unlockHideTimeout = setTimeout(()=>{ btn.style.display = 'none'; }, 10000);
+    /* access code */
+    function checkCode(){ const input = document.getElementById('codeInput').value.trim(); const button = document.getElementById('unlockButton'); if (input === '2354') { button.style.display = 'inline-block'; button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' }); clearTimeout(window._unlockHideTimeout); window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000); } else { button.style.display = 'none'; const el = document.getElementById('codeInput'); el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 }); } }
+    document.getElementById('codeInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); checkCode(); } // Launch secret game when unlocked
+  document.getElementById('unlockButton').addEventListener('click', function() {
+    launchGame('secret');
+    // hide the button after launching
+    this.style.display = 'none';
+  }); });
+
+    /* ---------- ADMIN: email+password client-side gate ---------- */
+    function getAdminState(){
+      const raw = localStorage.getItem('admin_attempts') || '{}';
+      try { const a = JSON.parse(raw); return { attempts: Number(a.attempts || 0), lockedUntil: Number(a.lockedUntil || 0) }; }
+      catch(e){ return { attempts:0, lockedUntil:0 }; }
+    }
+    function setAdminState(state){ localStorage.setItem('admin_attempts', JSON.stringify({ attempts: Number(state.attempts||0), lockedUntil: Number(state.lockedUntil||0) })); }
+
+    function showAdminModal(message){
+      const backdrop = document.getElementById('adminModalBackdrop');
+      document.getElementById('adminLoginMessage').textContent = message || 'Enter admin email and password to open the Admin panel.';
+      const info = document.getElementById('adminAttemptsInfo');
+      const st = getAdminState();
+      if (st.lockedUntil && Date.now() < st.lockedUntil) {
+        const remaining = Math.ceil((st.lockedUntil - Date.now())/1000);
+        info.textContent = `Locked for ${remaining}s`;
       } else {
-        btn.style.display = 'none';
-        const el = document.getElementById('codeInput');
-        el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 });
+        info.textContent = `Attempts left: ${Math.max(0, ADMIN_MAX_ATTEMPTS - st.attempts)}`;
+      }
+      backdrop.style.display = 'flex';
+      document.getElementById('adminEmailInput').value = '';
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminEmailInput').focus();
+    }
+    function closeAdminModal(){ document.getElementById('adminModalBackdrop').style.display = 'none'; }
+    document.getElementById('adminModalBackdrop').addEventListener('click', function(e){ if (e.target === this) closeAdminModal(); });
+
+    function onAdminToggleClick(){
+      if (sessionStorage.getItem('isAdmin') === 'true') {
+        const p = document.getElementById('adminPanel');
+        p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
+        p.setAttribute('aria-hidden', p.style.display === 'none');
+        if (p.style.display === 'flex') adminRenderTable();
+        return;
+      }
+      const st = getAdminState();
+      if (st.lockedUntil && Date.now() < st.lockedUntil) {
+        showAdminModal('Too many failed attempts — admin locked temporarily.');
+      } else {
+        showAdminModal();
       }
     }
 
-    // keyboard enter on code input
-    document.getElementById('codeInput').addEventListener('keydown', function(e){
-      if (e.key === 'Enter') { e.preventDefault(); checkCode(); }
-    });
+    function checkAdminCredentials(){
+      const st = getAdminState();
+      if (st.lockedUntil && Date.now() < st.lockedUntil) {
+        showAdminModal('Locked due to many failed attempts. Try again later.');
+        return;
+      }
+      const emailVal = (document.getElementById('adminEmailInput').value || '').trim().toLowerCase();
+      const passVal = (document.getElementById('adminPasswordInput').value || '').trim();
+      if (!emailVal || !passVal) { showAdminModal('Please enter both email and password.'); return; }
 
-    // --- shooting stars (cloned, independent) ---
-    function spawnShootingStar(){
-      const star = document.createElement('div');
-      star.className = 'shooting-star';
-      // random size / length
-      const length = Math.random() * 120 + 40; // px
-      const thickness = Math.random() * 2 + 1; // px
-      star.style.width = `${thickness}px`;
-      star.style.height = `${length}px`;
-      // random start position (from upper area, left-to-right)
-      const startX = Math.random() * (window.innerWidth * 0.9) + window.innerWidth * 0.05;
-      const startY = Math.random() * (window.innerHeight * 0.4) + window.innerHeight * 0.02;
-      star.style.left = `${startX}px`;
-      star.style.top = `${startY}px`;
-      star.style.opacity = '1';
-      star.style.transform = `rotate(${Math.random() * 40 - 20}deg)`;
-      document.body.appendChild(star);
-
-      const dx = (Math.random() * 600) + 200; // move right a bit (streak)
-      const dy = (Math.random() * 200) + 50; // move down
-      const angleDelta = Math.random() * 20 + 10;
-      const duration = Math.random() * 800 + 900; // ms
-
-      const anim = star.animate([
-        { transform: `translate(0px,0px) rotate(${0}deg)`, opacity: 1 },
-        { transform: `translate(${dx}px,${dy}px) rotate(${angleDelta}deg)`, opacity: 0 }
-      ], { duration: duration, easing: 'cubic-bezier(.2,.8,.2,1)' });
-
-      anim.onfinish = () => { star.remove(); };
+      if (emailVal === ADMIN_EMAIL && passVal === ADMIN_PASSWORD) {
+        sessionStorage.setItem('isAdmin','true');
+        setAdminState({ attempts: 0, lockedUntil: 0 });
+        closeAdminModal();
+        const p = document.getElementById('adminPanel');
+        p.style.display = 'flex';
+        p.setAttribute('aria-hidden','false');
+        adminRenderTable();
+        alert('Admin access granted for this session.');
+      } else {
+        st.attempts = (st.attempts || 0) + 1;
+        if (st.attempts >= ADMIN_MAX_ATTEMPTS) {
+          st.lockedUntil = Date.now() + ADMIN_LOCK_MS;
+          showAdminModal('Too many failed attempts — admin locked temporarily.');
+        } else {
+          showAdminModal('Email or password not recognized. Try again.');
+        }
+        setAdminState(st);
+      }
     }
 
-    function shootingStarLoop(){
-      spawnShootingStar();
-      // next star between 0.8s and 6s
-      setTimeout(shootingStarLoop, Math.random() * 5200 + 800);
+    function adminLogout(){
+      sessionStorage.removeItem('isAdmin');
+      const p = document.getElementById('adminPanel');
+      p.style.display = 'none';
+      p.setAttribute('aria-hidden','true');
+      alert('Admin session ended.');
     }
-    // start loop after page load
+
+    /* ---------- Admin spreadsheet code (with Reset Time buttons) ---------- */
+    function adminRenderTable(){
+      const tbody = document.querySelector('#adminTable tbody');
+      tbody.innerHTML = '';
+      let board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      if (!board.length) {
+        const name = localStorage.getItem('playerName') || 'Guest';
+        board = [{ name, coins }];
+      }
+      const timeMap = loadTimeMapping();
+      board.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+
+        const tdIndex = document.createElement('td');
+        tdIndex.style.width = '40px';
+        tdIndex.textContent = idx + 1;
+
+        const tdName = document.createElement('td');
+        const inputName = document.createElement('input');
+        inputName.type = 'text';
+        inputName.value = row.name || '';
+        tdName.appendChild(inputName);
+
+        const tdCoins = document.createElement('td');
+        const inputCoins = document.createElement('input');
+        inputCoins.type = 'number';
+        inputCoins.min = 0;
+        inputCoins.value = Number(row.coins) || 0;
+        tdCoins.appendChild(inputCoins);
+
+        const tdTime = document.createElement('td');
+        const totalSeconds = Number(timeMap[row.name] || 0);
+        tdTime.textContent = formatDuration(totalSeconds);
+
+        const tdActions = document.createElement('td');
+        tdActions.style.width = '200px';
+        // delete button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'small-btn';
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = function(){ adminDeleteRow(this); };
+
+        // reset time button
+        const resetBtn = document.createElement('button');
+        resetBtn.className = 'small-btn danger-btn';
+        resetBtn.style.marginLeft = '8px';
+        resetBtn.textContent = 'Reset Time';
+        resetBtn.title = `Zero ${row.name}'s cumulative time`;
+        resetBtn.onclick = function(){ adminResetTimeForRow(row.name, tdTime); };
+
+        tdActions.appendChild(delBtn);
+        tdActions.appendChild(resetBtn);
+
+        tr.appendChild(tdIndex);
+        tr.appendChild(tdName);
+        tr.appendChild(tdCoins);
+        tr.appendChild(tdTime);
+        tr.appendChild(tdActions);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function adminAddRow(){
+      const tbody = document.querySelector('#adminTable tbody');
+      const tr = document.createElement('tr');
+      const idx = tbody.children.length + 1;
+
+      const tdIndex = document.createElement('td');
+      tdIndex.style.width = '40px';
+      tdIndex.textContent = idx;
+
+      const tdName = document.createElement('td');
+      const inputName = document.createElement('input');
+      inputName.type = 'text';
+      inputName.value = 'New Player';
+      tdName.appendChild(inputName);
+
+      const tdCoins = document.createElement('td');
+      const inputCoins = document.createElement('input');
+      inputCoins.type = 'number';
+      inputCoins.min = 0;
+      inputCoins.value = 0;
+      tdCoins.appendChild(inputCoins);
+
+      const tdTime = document.createElement('td');
+      tdTime.textContent = formatDuration(0);
+
+      const tdActions = document.createElement('td');
+      tdActions.style.width = '200px';
+      const delBtn = document.createElement('button');
+      delBtn.className = 'small-btn';
+      delBtn.textContent = 'Delete';
+      delBtn.onclick = function(){ adminDeleteRow(this); };
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'small-btn danger-btn';
+      resetBtn.style.marginLeft = '8px';
+      resetBtn.textContent = 'Reset Time';
+      resetBtn.onclick = function(){ adminResetTimeForRow(inputName.value.trim() || 'Guest', tdTime); };
+      tdActions.appendChild(delBtn);
+      tdActions.appendChild(resetBtn);
+
+      tr.appendChild(tdIndex);
+      tr.appendChild(tdName);
+      tr.appendChild(tdCoins);
+      tr.appendChild(tdTime);
+      tr.appendChild(tdActions);
+
+      tbody.appendChild(tr);
+      const panel = document.getElementById('adminPanel');
+      panel.scrollTop = panel.scrollHeight;
+    }
+
+    function adminDeleteRow(button){
+      const tr = button.closest('tr');
+      if (!tr) return;
+      tr.remove();
+      Array.from(document.querySelectorAll('#adminTable tbody tr')).forEach((r,i)=> r.children[0].textContent = i+1 );
+    }
+
+    function adminSave(){
+      const rows = Array.from(document.querySelectorAll('#adminTable tbody tr'));
+      const newBoard = [];
+      for (const r of rows) {
+        const name = (r.querySelector('input[type="text"]').value || '').trim() || 'Guest';
+        let coinsVal = parseInt(r.querySelector('input[type="number"]').value, 10);
+        if (Number.isNaN(coinsVal) || coinsVal < 0) coinsVal = 0;
+        newBoard.push({ name, coins: coinsVal });
+      }
+      newBoard.sort((a,b)=> b.coins - a.coins);
+      localStorage.setItem('leaderboard', JSON.stringify(newBoard));
+      const myName = localStorage.getItem('playerName') || 'Guest';
+      const me = newBoard.find(p => p.name === myName);
+      if (me) { coins = me.coins; saveData(); updateCoinDisplay(); }
+      updateLeaderboard(); updateShopButtons();
+      adminRenderTable();
+      alert('Saved leaderboard changes.');
+    }
+
+    function adminExportCSV(){
+      const board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      if (!board.length) { alert('No leaderboard data to export.'); return; }
+      const csv = board.map(r => `${escapeCsv(r.name)},${Number(r.coins)}`).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'leaderboard.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function adminImportCSV(inputEl){
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e){
+        const text = e.target.result;
+        const rows = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const parsed = [];
+        for (const line of rows){
+          const parts = line.split(',');
+          if (!parts.length) continue;
+          const name = parts[0].trim();
+          const coinsVal = parseInt(parts[1] ? parts[1].trim() : '0', 10) || 0;
+          parsed.push({ name, coins: coinsVal });
+        }
+        if (!parsed.length) { alert('No valid rows found in CSV.'); inputEl.value = ''; return; }
+        parsed.sort((a,b)=> b.coins - a.coins);
+        localStorage.setItem('leaderboard', JSON.stringify(parsed));
+        adminRenderTable();
+        updateLeaderboard();
+        updateShopButtons();
+        alert('Imported CSV into leaderboard (saved).');
+        inputEl.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeCsv(s){ if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1) { return '"' + String(s).replace(/"/g,'""') + '"'; } return s; }
+
+    // Reset a single player's cumulative time (admin action)
+    function adminResetTimeForRow(playerName, tdTimeCell) {
+      if (!confirm(`Reset cumulative time for "${playerName}" to 0?`)) return;
+      const map = loadTimeMapping();
+      if (map.hasOwnProperty(playerName)) delete map[playerName];
+      saveTimeMapping(map);
+      // update UI
+      if (tdTimeCell) tdTimeCell.textContent = formatDuration(0);
+      // if current user is the one reset, update badge display
+      if ((getPlayerName() || 'Guest') === playerName) {
+        sessionStart = Date.now();
+        updateUserBadgeTime();
+      }
+      adminRenderTable();
+      alert(`Cumulative time for "${playerName}" has been reset.`);
+    }
+
+    // Reset all times
+    function adminResetAllTimes() {
+      if (!confirm('Reset cumulative time for ALL players to 0? This cannot be undone.')) return;
+      saveTimeMapping({});
+      sessionStart = Date.now();
+      updateUserBadgeTime();
+      adminRenderTable();
+      alert('All cumulative times reset to 0.');
+    }
+
+    /* shooting stars (lightweight) */
+
+    function spawnShootingStar() {
+  const star = document.createElement('div');
+  star.className = 'shooting-star';
+  const size = Math.random() * 2 + 1; // size of the star
+  star.style.width = `${size}px`;
+  star.style.height = `${size}px`;
+  star.style.background = 'white';
+  star.style.opacity = Math.random() * 0.8 + 0.2;
+  star.style.borderRadius = '50%';
+  
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight * 0.5;
+  const endX = startX + (Math.random() * 300 + 200);
+  const endY = startY + (Math.random() * 100 + 50);
+  star.style.left = `${startX}px`;
+  star.style.top = `${startY}px`;
+
+  // trail effect
+  star.style.boxShadow = `0 0 6px 2px rgba(255,255,255,0.6), 0 0 12px 4px rgba(255,255,255,0.3)`;
+
+  document.body.appendChild(star);
+
+  const duration = Math.random() * 2000 + 1500;
+  star.animate([
+    { transform: `translate(0px,0px)`, opacity: star.style.opacity },
+    { transform: `translate(${endX - startX}px, ${endY - startY}px)`, opacity: 0 }
+  ], { duration, easing: 'ease-out', iterations: 1 });
+
+  setTimeout(() => star.remove(), duration);
+}
+
+// spawn multiple shooting stars randomly
+setInterval(() => {
+  if (Math.random() < 1) spawnShootingStar(); // ~30% chance every interval
+}, 400);
+    
+    function shootingStarLoop(){ spawnShootingStar(); setTimeout(shootingStarLoop, Math.random()*5200+800); }
     setTimeout(shootingStarLoop, 1200);
 
-    // Make sure shop buttons reflect ownership when page loads
-    updateShopButtons();
+    // initial setup
+    initUserBadge();
+    updateLeaderboard();
 
-    // Expose some functions for debugging in console
-    window._BG = { spawnShootingStar, updateShopButtons, launchGame, claimDailyReward };
+    // on unload, persist session time
+    window.addEventListener('beforeunload', persistSessionTimeOnUnload);
+    window.addEventListener('pagehide', persistSessionTimeOnUnload);
+
+    // expose helpers for debugging
+    window._BG = { adminRenderTable, adminSave, adminExportCSV, adminImportCSV, adminLogout, loadTimeMapping, saveTimeMapping };
 
   </script>
 </body>
