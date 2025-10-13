@@ -869,7 +869,7 @@
 // spawn multiple shooting stars randomly
 setInterval(() => {
   if (Math.random() < 5) spawnShootingStar(); // ~30% chance every interval
-}, 400000);
+}, 6000);
     
     function shootingStarLoop(){ spawnShootingStar(); setTimeout(shootingStarLoop, Math.random()*5200+800); }
     setTimeout(shootingStarLoop, 1200);
