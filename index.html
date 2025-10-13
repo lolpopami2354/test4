@@ -835,36 +835,37 @@
 
     /* shooting stars (lightweight) */
 
-   function spawnShootingStar() {
+    function spawnShootingStar() {
   const star = document.createElement('div');
   star.className = 'shooting-star';
+  const size = Math.random() * 2 + 1; // size of the star
+  star.style.width = `${size}px`;
+  star.style.height = `${size}px`;
+  star.style.background = 'white';
+  star.style.opacity = Math.random() * 0.8 + 0.2;
+  star.style.borderRadius = '50%';
   
-  // Random horizontal position across the screen
-  const x = Math.random() * window.innerWidth;
-  
-  // Random vertical position anywhere on the screen
-  const y = Math.random() * window.innerHeight;
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight * 0.5;
+  const endX = startX + (Math.random() * 300 + 200);
+  const endY = startY + (Math.random() * 100 + 50);
+  star.style.left = `${startX}px`;
+  star.style.top = `${startY}px`;
 
-  star.style.left = `${x}px`;
-  star.style.top = `${y}px`;
+  // trail effect
+  star.style.boxShadow = `0 0 6px 2px rgba(255,255,255,0.6), 0 0 12px 4px rgba(255,255,255,0.3)`;
 
   document.body.appendChild(star);
 
-  // Animate star moving diagonally (example)
-  star.animate(
-    [
-      { transform: 'translate(0,0)', opacity: 1 },
-      { transform: 'translate(100px, 100px)', opacity: 0 }
-    ],
-    {
-      duration: 1500,
-      easing: 'linear'
-    }
-  );
+  const duration = Math.random() * 2000 + 1500;
+  star.animate([
+    { transform: `translate(0px,0px)`, opacity: star.style.opacity },
+    { transform: `translate(${endX - startX}px, ${endY - startY}px)`, opacity: 0 }
+  ], { duration, easing: 'ease-out', iterations: 1 });
 
-  // Remove the star after animation
-  setTimeout(() => star.remove(), 1500);
+  setTimeout(() => star.remove(), duration);
 }
+
 
 
 // spawn multiple shooting stars randomly
