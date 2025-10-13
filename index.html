@@ -205,6 +205,29 @@
   </div>
 
   <script>
+
+    // Ask for player name on first visit
+  let playerName = localStorage.getItem("playerName");
+  if(!playerName) {
+    playerName = prompt("Welcome! Please enter your name:");
+    if(playerName && playerName.trim() !== "") {
+      localStorage.setItem("playerName", playerName);
+    } else {
+      playerName = "Player";
+    }
+  }
+
+  // Add player to leaderboard initially
+  const leaderboardTbody = document.querySelector("#leaderboardTable tbody");
+  const playerRow = document.createElement("tr");
+  playerRow.innerHTML = `
+    <td>1</td>
+    <td>${playerName}</td>
+    <td>0</td>
+    <td>0</td>
+  `;
+  leaderboardTbody.appendChild(playerRow);
+    
     /* ---------------------------
        Config (edit here)
     --------------------------- */
