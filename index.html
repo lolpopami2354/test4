@@ -144,7 +144,7 @@
       </div>
     </div>
 
-    <div style="overflow:auto;max-height:48vh">
+    <div>
       <table class="admin-table" id="adminTable">
         <thead><tr><th>#</th><th>Player Name</th><th>Coins</th><th>Time (total)</th><th>Actions</th></tr></thead>
         <tbody></tbody>
@@ -206,7 +206,6 @@
   </div>
 
   <script>
-    
     /* ---------------------------
        Config (edit here)
     --------------------------- */
@@ -889,6 +888,7 @@ setInterval(() => {
 
     // expose helpers for debugging
     window._BG = { adminRenderTable, adminSave, adminExportCSV, adminImportCSV, adminLogout, loadTimeMapping, saveTimeMapping };
+
 
   </script>
 </body>
