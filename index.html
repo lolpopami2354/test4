@@ -7,68 +7,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg-mid:#0b0c2a;--accent:#00ffff;--panel:#1a1a3d;--muted:#cfc6ff}
-
-    /* --- Make body the single scroll container --- */
-    html,body{
-      height:100%;
-      margin:0;
-      padding:0;
-      /* only allow the body to scroll (single scrollbar) */
-      overflow-y:auto;
-      overflow-x:hidden;
-      -webkit-overflow-scrolling: touch;
-      background:
-        radial-gradient(ellipse at center,var(--bg-mid) 0%,#000 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.02) 0, transparent 100%);
-      color:#fff;
-      font-family:'Segoe UI',system-ui,-apple-system,"Orbitron",sans-serif;
-    }
-
-    /* Keep container content flowing inside the body (no separate scroll) */
+    html,body{height:100%;margin:0;padding:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+      background:radial-gradient(ellipse at center,var(--bg-mid) 0%,#000 100%),linear-gradient(180deg, rgba(255,255,255,0.02) 0, transparent 100%);
+      color:#fff;font-family:'Segoe UI',system-ui,-apple-system,"Orbitron",sans-serif;}
     .container{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding:40px 20px;max-width:1200px;margin:0 auto}
     h1.site-title{margin:10px 0 6px;font-size:2rem;color:var(--accent);text-shadow:0 0 12px rgba(0,255,255,0.14),0 6px 30px rgba(0,0,0,0.6);letter-spacing:1px}
-
-    /* User badge (top-left) */
-    .user-badge {
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 40;
-      background: linear-gradient(90deg, rgba(0,255,255,0.06), rgba(0,0,0,0.18));
-      border: 1px solid rgba(0,255,255,0.14);
-      padding: 8px 12px;
-      border-radius: 10px;
-      color: var(--accent);
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      box-shadow: 0 6px 26px rgba(0,255,255,0.06);
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      min-width: 220px;
-    }
+    .user-badge {position: fixed; top: 18px; left: 18px; z-index: 40; background: linear-gradient(90deg, rgba(0,255,255,0.06), rgba(0,0,0,0.18)); border: 1px solid rgba(0,255,255,0.14); padding: 8px 12px; border-radius: 10px; color: var(--accent); font-family: 'Orbitron', sans-serif; font-weight: 700; box-shadow: 0 6px 26px rgba(0,255,255,0.06); display: flex; gap: 10px; align-items: center; min-width: 220px; }
     .user-badge .name { font-size: 14px; letter-spacing: 0.5px; cursor: pointer; }
     .user-badge .time { font-size: 13px; color: rgba(207,198,255,0.9); font-weight:600; }
     .user-badge input.edit-name { background: var(--panel); color: var(--accent); border: 1px solid rgba(0,255,255,0.06); padding:6px 8px; border-radius:6px; font-family:'Orbitron'; font-weight:700; width:140px; }
-
-    /* top UI */
     .coin-container{position:fixed;top:20px;right:20px;z-index:14;display:flex;align-items:center;gap:10px}
     #coinDisplay{font-size:18px;background:rgba(0,255,255,0.08);padding:6px 12px;border-radius:8px;color:var(--accent);font-family:'Orbitron';box-shadow:0 0 10px rgba(0,255,255,0.06)}
     button.top-btn{padding:6px 12px;border-radius:8px;border:none;background:rgba(0,255,255,0.18);cursor:pointer;font-family:'Orbitron';transition:.2s}
-
-    /* panels */
     .panel{position:fixed;background:rgba(5,5,20,0.95);border:1px solid rgba(0,255,255,0.18);border-radius:12px;padding:12px;display:none;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,255,255,0.06);z-index:13;width:320px;animation:dropdown .28s ease}
     .shop-panel{top:70px;right:20px}
     .leaderboard-panel{top:70px;right:360px;width:260px}
     .admin-panel{top:70px;right:20px;width:640px;max-height:70vh;overflow:auto}
-
     @keyframes dropdown{from{transform:translateY(-12px);opacity:0}to{transform:translateY(0);opacity:1}}
-
     .shop-item{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-family:'Orbitron'}
     .buy-button{background:linear-gradient(90deg,#00ffff,#008080);border:2px solid #00ffff;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:0 0 6px #00ffff;transition:all .18s;font-family:'Orbitron'}
     .buy-button.owned{background:linear-gradient(90deg,#ff4444,#cc0000);border-color:#ff4444;color:#fff;cursor:not-allowed}
-
-    /* admin table */
     .admin-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     table.admin-table{width:100%;border-collapse:collapse;font-family:'Orbitron';color:#fff}
     table.admin-table th, table.admin-table td{border:1px solid rgba(255,255,255,0.06);padding:6px;font-size:14px;text-align:left;background:rgba(255,255,255,0.01)}
@@ -76,36 +34,25 @@
     .admin-actions{display:flex;gap:8px}
     .small-btn{padding:6px 10px;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(180deg,#00baba,#00ffff);color:#001;font-weight:700}
     .danger-btn{background:linear-gradient(180deg,#ff6666,#ff3333);color:#fff}
-
-    /* leaderboard close btn (neon pulse) */
     @keyframes pulseGlow{0%,100%{box-shadow:0 0 10px rgba(255,0,0,0.35),0 0 20px rgba(255,0,0,0.25)}50%{box-shadow:0 0 22px rgba(255,0,0,0.6),0 0 36px rgba(255,0,0,0.45)}}
     .leaderboard-panel .close-btn{margin-top:8px;padding:10px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#ff4444,#cc0000);color:#fff;font-family:'Orbitron';cursor:pointer;animation:pulseGlow 2s infinite}
     .leaderboard-panel .close-btn:hover{transform:translateY(-2px) scale(1.04)}
-
-    /* games & iframe */
     .game-block{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 16px;margin-bottom:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.005));border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
     .game-block h2{margin:0;font-size:1.05rem;color:var(--muted)}
     .game-block button.play-btn{padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer}
     #backButton{position:fixed;left:20px;padding:10px 18px;border-radius:8px;border:none;background:rgba(85,85,85,0.9);color:#fff;display:none;z-index:30}
     iframe{width:1200px;max-width:100%;height:600px;border-radius:10px;border:2px solid rgba(255,255,255,0.06);box-shadow:0 10px 50px rgba(0,0,0,0.7);display:none;margin-top:20px;z-index:2}
-
-    /* stars */
     .stars,.stars2,.nebula{position:fixed;top:0;left:0;width:200%;height:200%;pointer-events:none;z-index:0;transform:translate(-25%,-25%);mix-blend-mode:screen}
     .stars::after{content:"";position:absolute;width:2px;height:2px;background:white;box-shadow:50px 100px white,200px 300px white,400px 150px white,600px 250px white,800px 100px white;animation:twinkle 2.5s infinite ease-in-out}
     .stars2::after{content:"";position:absolute;width:1px;height:1px;background:#aaf0ff;box-shadow:120px 80px #aaf0ff,320px 240px #aaf0ff;opacity:0.6;animation:twinkle2 3.5s infinite ease-in-out}
     @keyframes twinkle{0%,100%{opacity:.9}50%{opacity:.3}} @keyframes twinkle2{0%,100%{opacity:.6}50%{opacity:.2}}
     .nebula{background:radial-gradient(600px 300px at 10% 10%, rgba(0,200,255,0.06), transparent 10%),radial-gradient(500px 260px at 80% 70%, rgba(180,0,255,0.04), transparent 8%);opacity:.9;mix-blend-mode:overlay}
-
-    /* shooting star base class */
     .shooting-star{pointer-events:none;z-index:0;border-radius:2px;position:absolute;display:block}
-
-    /* admin login modal */
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:20}
     .modal{background:linear-gradient(180deg,rgba(10,12,30,0.96),rgba(14,10,30,0.95));padding:18px;border-radius:12px;border:1px solid rgba(0,255,255,0.06);width:360px;max-width:96%;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
     .modal h4{margin:0 0 8px;color:var(--accent);font-family:'Orbitron'}
     .modal input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:var(--panel);color:var(--accent);margin-bottom:8px}
     .modal .modal-actions{display:flex;gap:8px;justify-content:flex-end}
-
     .admin-note{font-size:13px;color:var(--muted);font-family:'Orbitron'}
     @media(max-width:900px){ .admin-panel{right:10px;left:10px;width:auto} iframe{height:80vh} }
   </style>
@@ -113,7 +60,6 @@
 <body>
   <div class="stars"></div><div class="stars2"></div><div class="nebula"></div>
 
-  <!-- User badge (top-left) -->
   <div id="userBadge" class="user-badge" aria-live="polite">
     <div class="name" id="userName" title="Click to edit name">Guest</div>
     <div class="time" id="userTime">00:00:00</div>
@@ -144,7 +90,6 @@
       <h3>Admin Spreadsheet — Edit Players' Coins & Time</h3>
       <div><button class="small-btn" onclick="adminLogout()" title="Log out admin session">Log out</button></div>
     </div>
-
     <div class="admin-controls">
       <div class="admin-actions">
         <button class="small-btn" onclick="adminAddRow()">+ Add Row</button>
@@ -157,7 +102,6 @@
         </label>
       </div>
     </div>
-
     <div>
       <table class="admin-table" id="adminTable">
         <thead><tr><th>#</th><th>Player Name</th><th>Coins</th><th>Time (total)</th><th>Actions</th></tr></thead>
@@ -172,7 +116,6 @@
   <div class="container">
     <h1 class="site-title">WELCOME to Bubba's Gramama</h1>
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="gif" style="max-width:90%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6)">
-
     <div class="access-panel" aria-label="Galactic access panel" style="width:100%;max-width:760px;margin:18px 0;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(10,12,30,0.6),rgba(14,10,30,0.35));border:1px solid rgba(0,255,255,0.06);display:flex;flex-direction:column;align-items:center;gap:12px">
       <h3>Enter Access Code</h3>
       <div class="code-row" style="display:flex;gap:12px;width:100%;justify-content:center;align-items:center">
@@ -203,7 +146,6 @@
     <iframe id="gameFrame" src="" allowfullscreen></iframe>
   </div>
 
-  <!-- admin login modal -->
   <div class="modal-backdrop" id="adminModalBackdrop" role="dialog" aria-modal="true" style="display:none">
     <div class="modal" role="document">
       <h4>Admin Login</h4>
@@ -225,9 +167,9 @@
        Config (edit here)
     --------------------------- */
     const ADMIN_EMAIL = 'bywhitley@s.sfusd.edu'.toLowerCase();
-    const ADMIN_PASSWORD = 'timtimcheesssisgreat!423yesrolds!!'; // change before sharing
+    const ADMIN_PASSWORD = 'timtimcheesssisgreat!423yesrolds!!';
     const ADMIN_MAX_ATTEMPTS = 4;
-    const ADMIN_LOCK_MS = 60 * 1000; // 60 seconds lock after too many failed attempts
+    const ADMIN_LOCK_MS = 60 * 1000; // 60 seconds
 
     /* ---------- state & helpers ---------- */
     const gameURLs = {
@@ -250,21 +192,41 @@
       'secret': "https://010203040519.studentvue.my.cdn.cloudflare.net/"
     };
 
-    // Coins & owned games
+    // Coins & owned games - persistent
     let coins = parseInt(localStorage.getItem('coins') || '0', 10);
     let ownedGames = JSON.parse(localStorage.getItem('ownedGames') || '{}');
 
-    function saveData(){ localStorage.setItem('coins', String(coins)); localStorage.setItem('ownedGames', JSON.stringify(ownedGames)); }
-    function updateCoinDisplay(){ document.getElementById('coinDisplay').textContent = `🪙 ${coins}`; }
-    function updateShopButtons(){ document.querySelectorAll('.buy-button').forEach(btn=>{ const gid = btn.dataset.game; const cost = btn.dataset.cost || ''; if (gid && ownedGames[gid]) { btn.classList.add('owned'); btn.textContent = 'Owned'; btn.disabled = true; } else { btn.classList.remove('owned'); btn.disabled = false; btn.textContent = cost ? `Buy - ${cost}🪙` : 'Buy'; } }); }
+    function saveData(){
+      localStorage.setItem('coins', String(coins));
+      localStorage.setItem('ownedGames', JSON.stringify(ownedGames));
+    }
 
-    // ---------------- Time storage per-user ----------------
-    // Storage key: 'timeSpentByUser' => JSON object { "Alice": 1234, "Bob": 5678 }
+    function updateCoinDisplay(){
+      const el = document.getElementById('coinDisplay');
+      if (el) el.textContent = `🪙 ${coins}`;
+    }
+
+    function updateShopButtons(){
+      document.querySelectorAll('.buy-button').forEach(btn=>{
+        const gid = btn.dataset.game;
+        const cost = btn.dataset.cost || '';
+        if (gid && ownedGames[gid]) {
+          btn.classList.add('owned');
+          btn.textContent = 'Owned';
+          btn.disabled = true;
+        } else {
+          btn.classList.remove('owned');
+          btn.disabled = false;
+          btn.textContent = cost ? `Buy - ${cost}🪙` : 'Buy';
+        }
+      });
+    }
+
+    /* ---------------- Time storage per-user ---------------- */
     function loadTimeMapping() {
       try {
         const raw = localStorage.getItem('timeSpentByUser');
         if (!raw) {
-          // backward compatibility: if old flat key exists, migrate it to current player
           const legacy = localStorage.getItem('timeSpentSeconds');
           if (legacy) {
             const val = parseInt(legacy, 10) || 0;
@@ -282,15 +244,12 @@
         return {};
       }
     }
-    function saveTimeMapping(map) {
-      localStorage.setItem('timeSpentByUser', JSON.stringify(map || {}));
-    }
+    function saveTimeMapping(map) { localStorage.setItem('timeSpentByUser', JSON.stringify(map || {})); }
 
     function getPlayerName() {
       return (localStorage.getItem('playerName') || '').trim() || null;
     }
 
-    // If no playerName set, prompt once.
     function ensurePlayerName() {
       let name = getPlayerName();
       if (!name) {
@@ -300,7 +259,7 @@
       updateUserBadgeName();
     }
 
-    // ---------- USER BADGE & CUMULATIVE TIME ----------
+    /* ---------- USER BADGE & CUMULATIVE TIME ---------- */
     let sessionStart = Date.now();
     let sessionTimerInterval = null;
 
@@ -343,19 +302,16 @@
     function updateUserBadgeName() {
       const name = getPlayerName() || 'Guest';
       const elem = document.getElementById('userName');
-      // If element exists and is input or div, set its text/value appropriately
       if (elem) elem.textContent = name;
-      // reflect in localStorage if not set (should be kept in sync)
       if (localStorage.getItem('playerName') !== name) localStorage.setItem('playerName', name);
-      // update leaderboard UI when name changes
       updateLeaderboard();
-      // reposition back button in case badge size changed
       positionBackButton();
     }
 
     function updateUserBadgeTime() {
       const total = getTotalSecondsForCurrentUser();
-      document.getElementById('userTime').textContent = formatDuration(total);
+      const el = document.getElementById('userTime');
+      if (el) el.textContent = formatDuration(total);
     }
 
     function startUserTimer() {
@@ -365,30 +321,29 @@
       sessionTimerInterval = setInterval(updateUserBadgeTime, 1000);
     }
 
-    // persist session seconds on unload for current player
     function persistSessionTimeOnUnload() {
       try {
         const name = getPlayerName() || 'Guest';
         const sessionSec = Math.floor((Date.now() - sessionStart) / 1000);
         addSecondsToName(name, sessionSec);
-      } catch (e) {
-        // ignore
-      }
+      } catch (e) {}
     }
 
-    // storage event cross-tab
     window.addEventListener('storage', (ev) => {
       if (ev.key === 'playerName') updateUserBadgeName();
       if (ev.key === 'timeSpentByUser') updateUserBadgeTime();
+      if (ev.key === 'coins') {
+        coins = parseInt(localStorage.getItem('coins') || '0', 10);
+        updateCoinDisplay();
+        updateShopButtons();
+      }
     });
 
-    // make the badge name clickable/editable
     function attachBadgeEditHandlers() {
       const existing = document.getElementById('userName');
       if (!existing) return;
-      existing.onclick = null; // avoid duplicate handlers
+      existing.onclick = null;
       existing.addEventListener('click', () => {
-        // transform into input
         const oldName = getPlayerName() || 'Guest';
         const input = document.createElement('input');
         input.className = 'edit-name';
@@ -396,53 +351,41 @@
         input.title = 'Press Enter to save, Escape to cancel';
         existing.replaceWith(input);
         input.focus();
-        // select text
         input.setSelectionRange(0, input.value.length);
 
         function finish(save) {
           const newNameRaw = input.value.trim() || 'Guest';
           const newName = newNameRaw;
-          const parent = input.parentElement;
           const span = document.createElement('div');
           span.id = 'userName';
           span.className = 'name';
           span.textContent = newName;
-          // replace input with span
           input.replaceWith(span);
-          // reattach handler
           attachBadgeEditHandlers();
           if (save) {
-            // transfer time mapping from oldName to newName (merge if needed)
             if (oldName !== newName) {
               const map = loadTimeMapping();
               const oldSeconds = Number(map[oldName] || 0);
               const newSeconds = Number(map[newName] || 0);
               map[newName] = Math.max(0, oldSeconds + newSeconds);
-              // delete old key
               if (map.hasOwnProperty(oldName)) delete map[oldName];
               saveTimeMapping(map);
-              // update stored playerName
               localStorage.setItem('playerName', newName);
-              // update leaderboard names (rename entries matching oldName -> newName)
               const board = JSON.parse(localStorage.getItem('leaderboard') || '[]');
               let updated = false;
               for (const p of board) {
                 if (p.name === oldName) { p.name = newName; updated = true; }
               }
               if (updated) localStorage.setItem('leaderboard', JSON.stringify(board));
-              // reflect UI
               updateUserBadgeName();
               updateUserBadgeTime();
               updateLeaderboard();
-              // notify other tabs via storage events
               localStorage.setItem('timeSpentByUser', JSON.stringify(loadTimeMapping()));
               localStorage.setItem('playerName', newName);
             }
           } else {
-            // cancelled -> nothing else
             updateUserBadgeName();
           }
-          // reposition back button after edit
           positionBackButton();
         }
 
@@ -454,48 +397,59 @@
       });
     }
 
-    // Keep Back button below the profile badge so they don't overlap
     function positionBackButton() {
       const badge = document.getElementById('userBadge');
       const back = document.getElementById('backButton');
       if (!badge || !back) return;
-
-      // get bounding rect relative to viewport
       const rect = badge.getBoundingClientRect();
-
-      // desired gap (px) between badge bottom and back button top
       const GAP = 8;
-
-      // compute new top: badge bottom + gap
       const finalTop = Math.max(8, Math.round(rect.bottom + GAP));
-
       back.style.top = finalTop + 'px';
-      // ensure left is kept at 20 (consistent with CSS)
       back.style.left = '20px';
     }
 
-    // initialize user badge
     function initUserBadge() {
       ensurePlayerName();
       startUserTimer();
       attachBadgeEditHandlers();
-      // initial position update for back button
       positionBackButton();
       window.addEventListener('beforeunload', persistSessionTimeOnUnload);
       window.addEventListener('pagehide', persistSessionTimeOnUnload);
-      // update position on resize (badge may reflow)
       window.addEventListener('resize', positionBackButton);
     }
 
     // ---------- rest of site logic ----------
-    updateCoinDisplay(); updateShopButtons();
+    updateCoinDisplay();
+    updateShopButtons();
 
-    // Give 250 coins after 60 seconds for visit
-    setTimeout(()=>{ coins += 250; saveData(); updateCoinDisplay(); if (document.visibilityState !== 'hidden') alert("You earned 250 🪙 for visiting!"); }, 60000);
+    // Give 250 coins after 60 seconds for visit (and save)
+    setTimeout(()=>{
+      coins += 250;
+      saveData();
+      updateCoinDisplay();
+      if (document.visibilityState !== 'hidden') alert("You earned 250 🪙 for visiting!");
+    }, 60000);
 
     /* shop / buy */
-    function toggleShop(){ const p=document.getElementById('shopPanel'); p.style.display = (p.style.display==='flex') ? 'none' : 'flex'; p.setAttribute('aria-hidden', p.style.display==='none'); }
-    function buyGame(gid,cost){ if (ownedGames[gid]) { alert("You already own this game."); return; } if (coins >= cost) { coins -= cost; ownedGames[gid] = true; saveData(); updateCoinDisplay(); updateShopButtons(); alert(`You bought ${gid} 🎮!`); } else alert("Not enough coins!"); }
+    function toggleShop(){
+      const p=document.getElementById('shopPanel');
+      p.style.display = (p.style.display==='flex') ? 'none' : 'flex';
+      p.setAttribute('aria-hidden', p.style.display==='none');
+    }
+
+    function buyGame(gid,cost){
+      if (ownedGames[gid]) { alert("You already own this game."); return; }
+      if (coins >= cost) {
+        coins -= cost;
+        ownedGames[gid] = true;
+        saveData();
+        updateCoinDisplay();
+        updateShopButtons();
+        alert(`You bought ${gid} 🎮!`);
+        // persist coins change so other tabs see it
+        localStorage.setItem('coins', String(coins));
+      } else alert("Not enough coins!");
+    }
 
     /* iframe */
     function launchGame(id){
@@ -512,12 +466,9 @@
       const iframe = document.getElementById('gameFrame');
       iframe.src = src;
       iframe.style.display = 'block';
-
-      // show and position back button under badge
       const backBtn = document.getElementById('backButton');
       backBtn.style.display = 'inline-block';
       positionBackButton();
-
       window.scrollTo({ top: iframe.offsetTop - 20, behavior: 'smooth' });
     }
     function goBack(){
@@ -530,10 +481,23 @@
     }
 
     /* daily reward */
-    function claimDailyReward(){ const today = new Date().toDateString(); const last = localStorage.getItem('lastDailyClaim'); if (last === today) { alert("You already claimed today's reward! Come back tomorrow."); return; } coins += 250; saveData(); updateCoinDisplay(); localStorage.setItem('lastDailyClaim', today); alert("🎁 You received 250🪙 for your daily visit!"); }
+    function claimDailyReward(){
+      const today = new Date().toDateString();
+      const last = localStorage.getItem('lastDailyClaim');
+      if (last === today) { alert("You already claimed today's reward! Come back tomorrow."); return; }
+      coins += 250;
+      saveData();
+      updateCoinDisplay();
+      localStorage.setItem('lastDailyClaim', today);
+      alert("🎁 You received 250🪙 for your daily visit!");
+    }
 
     /* leaderboard */
-    function toggleLeaderboard(){ const p = document.getElementById('leaderboardPanel'); if (p.style.display === 'flex') { p.style.display = 'none'; p.setAttribute('aria-hidden','true'); } else { updateLeaderboard(); p.style.display = 'flex'; p.setAttribute('aria-hidden','false'); } }
+    function toggleLeaderboard(){
+      const p = document.getElementById('leaderboardPanel');
+      if (p.style.display === 'flex') { p.style.display = 'none'; p.setAttribute('aria-hidden','true'); }
+      else { updateLeaderboard(); p.style.display = 'flex'; p.setAttribute('aria-hidden','false'); }
+    }
     function closeLeaderboard(){ document.getElementById('leaderboardPanel').style.display = 'none'; document.getElementById('leaderboardPanel').setAttribute('aria-hidden','true'); }
 
     function updateLeaderboard(){
@@ -550,24 +514,19 @@
 
       const list = document.getElementById('leaderboardList');
       list.innerHTML = board.slice(0, 10).map((p, i) =>
-        `<div>${i+1}. ${p.name} — ${p.coins}🪙</div>`).join('');
+        `<div>${i+1}. ${p.name} — ${p.coins}🪙</div>` ).join('');
     }
 
     /* access code */
     function checkCode(){ const input = document.getElementById('codeInput').value.trim(); const button = document.getElementById('unlockButton'); if (input === '2354') { button.style.display = 'inline-block'; button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' }); clearTimeout(window._unlockHideTimeout); window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000); } else { button.style.display = 'none'; const el = document.getElementById('codeInput'); el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 }); } }
-    document.getElementById('codeInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); checkCode(); } // Launch secret game when unlocked
-  document.getElementById('unlockButton').addEventListener('click', function() {
-    launchGame('secret');
-    // hide the button after launching
-    this.style.display = 'none';
-  }); });
+    document.getElementById('codeInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); checkCode(); } });
+    document.getElementById('unlockButton').addEventListener('click', function() {
+      launchGame('secret');
+      this.style.display = 'none';
+    });
 
-    /* ---------- ADMIN: email+password client-side gate ---------- */
-    function getAdminState(){
-      const raw = localStorage.getItem('admin_attempts') || '{}';
-      try { const a = JSON.parse(raw); return { attempts: Number(a.attempts || 0), lockedUntil: Number(a.lockedUntil || 0) }; }
-      catch(e){ return { attempts:0, lockedUntil:0 }; }
-    }
+    /* ---------- ADMIN ---------- */
+    function getAdminState(){ const raw = localStorage.getItem('admin_attempts') || '{}'; try { const a = JSON.parse(raw); return { attempts: Number(a.attempts || 0), lockedUntil: Number(a.lockedUntil || 0) }; } catch(e){ return { attempts:0, lockedUntil:0 }; } }
     function setAdminState(state){ localStorage.setItem('admin_attempts', JSON.stringify({ attempts: Number(state.attempts||0), lockedUntil: Number(state.lockedUntil||0) })); }
 
     function showAdminModal(message){
@@ -636,13 +595,7 @@
       }
     }
 
-    function adminLogout(){
-      sessionStorage.removeItem('isAdmin');
-      const p = document.getElementById('adminPanel');
-      p.style.display = 'none';
-      p.setAttribute('aria-hidden','true');
-      alert('Admin session ended.');
-    }
+    function adminLogout(){ sessionStorage.removeItem('isAdmin'); const p = document.getElementById('adminPanel'); p.style.display = 'none'; p.setAttribute('aria-hidden','true'); alert('Admin session ended.'); }
 
     /* ---------- Admin spreadsheet code (with Reset Time buttons) ---------- */
     function adminRenderTable(){
@@ -680,13 +633,11 @@
 
         const tdActions = document.createElement('td');
         tdActions.style.width = '200px';
-        // delete button
         const delBtn = document.createElement('button');
         delBtn.className = 'small-btn';
         delBtn.textContent = 'Delete';
         delBtn.onclick = function(){ adminDeleteRow(this); };
 
-        // reset time button
         const resetBtn = document.createElement('button');
         resetBtn.className = 'small-btn danger-btn';
         resetBtn.style.marginLeft = '8px';
@@ -824,15 +775,12 @@
 
     function escapeCsv(s){ if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1) { return '"' + String(s).replace(/"/g,'""') + '"'; } return s; }
 
-    // Reset a single player's cumulative time (admin action)
     function adminResetTimeForRow(playerName, tdTimeCell) {
       if (!confirm(`Reset cumulative time for "${playerName}" to 0?`)) return;
       const map = loadTimeMapping();
       if (map.hasOwnProperty(playerName)) delete map[playerName];
       saveTimeMapping(map);
-      // update UI
       if (tdTimeCell) tdTimeCell.textContent = formatDuration(0);
-      // if current user is the one reset, update badge display
       if ((getPlayerName() || 'Guest') === playerName) {
         sessionStart = Date.now();
         updateUserBadgeTime();
@@ -841,7 +789,6 @@
       alert(`Cumulative time for "${playerName}" has been reset.`);
     }
 
-    // Reset all times
     function adminResetAllTimes() {
       if (!confirm('Reset cumulative time for ALL players to 0? This cannot be undone.')) return;
       saveTimeMapping({});
@@ -852,7 +799,6 @@
     }
 
     /* shooting stars (lightweight) */
-
     function spawnShootingStar() {
       const star = document.createElement('div');
       star.className = 'shooting-star';
@@ -870,8 +816,7 @@
       star.style.left = `${startX}px`;
       star.style.top = `${startY}px`;
 
-      // trail effect
-      star.style.boxShadow = `0 0 6px 2px rgba(255,255,255,0.6), 0 0 12px 4px rgba(255,255,255,0.3)`;
+      star.style.boxShadow = '0 0 6px 2px rgba(255,255,255,0.6), 0 0 12px 4px rgba(255,255,255,0.3)';
 
       document.body.appendChild(star);
 
@@ -884,7 +829,6 @@
       setTimeout(() => star.remove(), duration);
     }
 
-    // spawn multiple shooting stars randomly
     setInterval(() => {
       if (Math.random() < 0.3) spawnShootingStar();
     }, 900);
@@ -896,11 +840,11 @@
     initUserBadge();
     updateLeaderboard();
 
-    // on unload, persist session time
+    // persist session time on unload
     window.addEventListener('beforeunload', persistSessionTimeOnUnload);
     window.addEventListener('pagehide', persistSessionTimeOnUnload);
 
-    // expose helpers for debugging
+    // expose helpers
     window._BG = { adminRenderTable, adminSave, adminExportCSV, adminImportCSV, adminLogout, loadTimeMapping, saveTimeMapping };
   </script>
 </body>
