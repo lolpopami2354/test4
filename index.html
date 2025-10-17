@@ -454,7 +454,7 @@
 
     /* iframe */
     function launchGame(id){
-      const shopProtected = ['drivemad','hideandsmash'];
+      const shopProtected = ['drivemad','hideandsmash','voidNetwork'];
       if (shopProtected.includes(id) && !ownedGames[id]) {
         alert("You need to buy this game first 🛒");
         return;
