@@ -77,6 +77,7 @@
     <h3>Game Shop</h3>
     <div class="shop-item"><span>Drive Mad</span><button class="buy-button" data-game="drivemad" data-cost="300" onclick="buyGame('drivemad',300)">Buy - 300🪙</button></div>
     <div class="shop-item"><span>Hide and Smash</span><button class="buy-button" data-game="hideandsmash" data-cost="200" onclick="buyGame('hideandsmash',200)">Buy - 200🪙</button></div>
+    <div class="shop-item"><span>void network V5</span><button class="buy-button" data-game="voidNetwork" data-cost="1000" onclick="buyGame('voidNetwork',1000)">Buy - 1000🪙</button></div>
   </div>
 
   <div class="panel leaderboard-panel" id="leaderboardPanel" aria-hidden="true">
@@ -518,7 +519,7 @@
     }
 
     /* access code */
-    function checkCode(){ const input = document.getElementById('codeInput').value.trim(); const button = document.getElementById('unlockButton'); if (input === '2354') { button.style.display = 'inline-block'; button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' }); clearTimeout(window._unlockHideTimeout); window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000); } else { button.style.display = 'none'; const el = document.getElementById('codeInput'); el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 }); } }
+    function checkCode(){ const input = document.getElementById('codeInput').value.trim(); const button = document.getElementById('unlockButton'); if (input === 'f-pres47') { button.style.display = 'inline-block'; button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' }); clearTimeout(window._unlockHideTimeout); window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000); } else { button.style.display = 'none'; const el = document.getElementById('codeInput'); el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 }); } }
     document.getElementById('codeInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); checkCode(); } });
     document.getElementById('unlockButton').addEventListener('click', function() {
       launchGame('secret');
