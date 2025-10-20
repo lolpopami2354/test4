@@ -55,7 +55,7 @@
     .modal .modal-actions{display:flex;gap:8px;justify-content:flex-end}
     .admin-note{font-size:13px;color:var(--muted);font-family:'Orbitron'}
     @media(max-width:900px){ .admin-panel{right:10px;left:10px;width:auto} iframe{height:80vh} }
-  </style>
+    </style>
 </head>
 <body>
   <div class="stars"></div><div class="stars2"></div><div class="nebula"></div>
@@ -302,7 +302,7 @@
     }
 
     function updateUserBadgeName() {
-      const name = getPlayerName() || 'Guest';
+      const name = getPlayerName() || 'Bubbas Guest';
       const elem = document.getElementById('userName');
       if (elem) elem.textContent = name;
       if (localStorage.getItem('playerName') !== name) localStorage.setItem('playerName', name);
@@ -346,7 +346,7 @@
       if (!existing) return;
       existing.onclick = null;
       existing.addEventListener('click', () => {
-        const oldName = getPlayerName() || 'Guest';
+        const oldName = getPlayerName() || 'Bubbas Guest';
         const input = document.createElement('input');
         input.className = 'edit-name';
         input.value = oldName;
