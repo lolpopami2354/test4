@@ -42,6 +42,26 @@
     .game-block button.play-btn{padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(180deg,var(--accent),#00cfcf);cursor:pointer}
     #backButton{position:fixed;left:20px;padding:10px 18px;border-radius:8px;border:none;background:rgba(85,85,85,0.9);color:#fff;display:none;z-index:30}
     iframe{width:1200px;max-width:100%;height:600px;border-radius:10px;border:2px solid rgba(255,255,255,0.06);box-shadow:0 10px 50px rgba(0,0,0,0.7);display:none;margin-top:20px;z-index:2}
+
+    /* Fullscreen-friendly styles (when the iframe or its ancestor is in fullscreen) */
+    :fullscreen iframe, :-webkit-full-screen iframe, :-ms-fullscreen iframe,
+    iframe:fullscreen, iframe:-webkit-full-screen, iframe:-ms-fullscreen,
+    :fullscreen > iframe, :-webkit-full-screen > iframe {
+      width:100vw !important;
+      height:100vh !important;
+      position:fixed !important;
+      top:0 !important;
+      left:0 !important;
+      margin:0 !important;
+      border-radius:0 !important;
+      border:none !important;
+      box-shadow:none !important;
+      z-index:99999 !important;
+    }
+
+    /* Some browsers put the element itself into fullscreen, others put a parent — cover both */
+    :fullscreen, :-webkit-full-screen, :-ms-fullscreen { background: #000; }
+
     .stars,.stars2,.nebula{position:fixed;top:0;left:0;width:200%;height:200%;pointer-events:none;z-index:0;transform:translate(-25%,-25%);mix-blend-mode:screen}
     .stars::after{content:"";position:absolute;width:2px;height:2px;background:white;box-shadow:50px 100px white,200px 300px white,400px 150px white,600px 250px white,800px 100px white;animation:twinkle 2.5s infinite ease-in-out}
     .stars2::after{content:"";position:absolute;width:1px;height:1px;background:#aaf0ff;box-shadow:120px 80px #aaf0ff,320px 240px #aaf0ff;opacity:0.6;animation:twinkle2 3.5s infinite ease-in-out}
@@ -71,6 +91,8 @@
     <span id="coinDisplay">🪙 0</span>
     <button id="shopToggle" class="top-btn" onclick="toggleShop()">🛒 Shop</button>
     <button id="adminToggle" class="top-btn" onclick="onAdminToggleClick()">📋 Admin</button>
+    <!-- Fullscreen toggle (shows only while iframe visible) -->
+    <button id="fullscreenToggle" class="top-btn" style="display:none" title="Make the game full screen" onclick="toggleFullscreen()">⛶ Fullscreen</button>
   </div>
 
   <div class="panel shop-panel" id="shopPanel" aria-hidden="true">
@@ -78,7 +100,7 @@
     <div class="shop-item"><span>Drive Mad</span><button class="buy-button" data-game="drivemad" data-cost="300" onclick="buyGame('drivemad',300)">Buy - 300🪙</button></div>
     <div class="shop-item"><span>Hide and Smash</span><button class="buy-button" data-game="hideandsmash" data-cost="200" onclick="buyGame('hideandsmash',200)">Buy - 200🪙</button></div>
     <div class="shop-item"><span>void network V5</span><button class="buy-button" data-game="voidNetwork" data-cost="1000" onclick="buyGame('voidNetwork',1000)">Buy - 1000🪙</button></div>
-    <div class="shop-item"><span>Drift Hunter</span><button class="buy-button" data-game="driftHunters" data-cost="1000" onclick="buyGame('driftHunters',400)">Buy - 400🪙</button></div>
+    <div class="shop-item"><span>Drift Hunter</span><button class="buy-button" data-game="driftHunters" data-cost="1000" onclick="buyGame('driftHunters',1000)">Buy - 400🪙</button></div>
   </div>
 
   <div class="panel leaderboard-panel" id="leaderboardPanel" aria-hidden="true">
@@ -145,7 +167,7 @@
     <div class="game-block"><h2>Opposite Day</h2><button class="play-btn" onclick="launchGame('oppositeday')">Don't play Opposite Day</button></div>
     <div class="game-block"><h2>❄️ Snow Rider 3D</h2><button class="play-btn" onclick="launchGame('snowrider')">Play Snow Rider 3D</button></div>
 
-    <iframe id="gameFrame" src="" allowfullscreen></iframe>
+    <iframe id="gameFrame" src="" allowfullscreen allow="fullscreen"></iframe>
   </div>
 
   <div class="modal-backdrop" id="adminModalBackdrop" role="dialog" aria-modal="true" style="display:none">
@@ -453,7 +475,7 @@
       } else alert("Not enough coins!");
     }
 
-    /* iframe */
+    /* iframe + fullscreen support */
     function launchGame(id){
       const shopProtected = ['drivemad','hideandsmash','voidNetwork','driftHunters'];
       if (shopProtected.includes(id) && !ownedGames[id]) {
@@ -468,19 +490,75 @@
       const iframe = document.getElementById('gameFrame');
       iframe.src = src;
       iframe.style.display = 'block';
+
+      // show back + fullscreen buttons
       const backBtn = document.getElementById('backButton');
+      const fsBtn = document.getElementById('fullscreenToggle');
       backBtn.style.display = 'inline-block';
+      fsBtn.style.display = 'inline-block';
+
       positionBackButton();
       window.scrollTo({ top: iframe.offsetTop - 20, behavior: 'smooth' });
     }
+
     function goBack(){
       const iframe = document.getElementById('gameFrame');
       iframe.style.display = 'none';
       iframe.src = '';
       const backBtn = document.getElementById('backButton');
       backBtn.style.display = 'none';
+      const fsBtn = document.getElementById('fullscreenToggle');
+      fsBtn.style.display = 'none';
+      // ensure we exit fullscreen if leaving while fullscreen
+      try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){}
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // helper to request fullscreen safely with fallbacks
+    async function requestFsOnElement(el) {
+      if (!el) return;
+      try {
+        if (el.requestFullscreen) await el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.msRequestFullscreen) el.msRequestFullscreen();
+      } catch (e) {
+        console.warn('Primary fullscreen request failed, trying wrapper...', e);
+        const wrapper = el.parentElement || document.documentElement;
+        try {
+          if (wrapper.requestFullscreen) await wrapper.requestFullscreen();
+          else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+          else if (wrapper.msRequestFullscreen) wrapper.msRequestFullscreen();
+        } catch (err) {
+          console.warn('Fallback fullscreen also failed', err);
+          alert('Unable to enter fullscreen due to browser restrictions.');
+        }
+      }
+    }
+
+    function toggleFullscreen(){
+      const iframe = document.getElementById('gameFrame');
+      if (!iframe || iframe.style.display === 'none') return alert('Open a game first');
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+      if (isFs) {
+        try { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); } catch(e){}
+      } else {
+        requestFsOnElement(iframe);
+      }
+    }
+
+    function onFullscreenChange(){
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+      const fsBtn = document.getElementById('fullscreenToggle');
+      if (!fsBtn) return;
+      if (isFs) {
+        fsBtn.textContent = 'Exit Fullscreen ⤢';
+      } else {
+        fsBtn.textContent = '⛶ Fullscreen';
+      }
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    document.addEventListener('msfullscreenchange', onFullscreenChange);
 
     /* daily reward */
     function claimDailyReward(){
@@ -520,7 +598,23 @@
     }
 
     /* access code */
-    function checkCode(){ const input = document.getElementById('codeInput').value.trim(); const button = document.getElementById('unlockButton'); if (input === 'f-pres47','!NO-KINGS!') { button.style.display = 'inline-block'; button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' }); clearTimeout(window._unlockHideTimeout); window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000); } else { button.style.display = 'none'; const el = document.getElementById('codeInput'); el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 }); } }
+    function checkCode(){
+      const input = document.getElementById('codeInput').value.trim();
+      const normalized = input.toLowerCase();
+      // Acceptable codes (case-insensitive). This requires exact string match after trimming.
+      const allowed = ['f-pres47', 'no-kings!', '!no-kings!'];
+      const button = document.getElementById('unlockButton');
+      if (allowed.includes(normalized)) {
+        button.style.display = 'inline-block';
+        button.animate([{ transform: 'scale(.96)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' });
+        clearTimeout(window._unlockHideTimeout);
+        window._unlockHideTimeout = setTimeout(()=>{ button.style.display = 'none'; }, 10000);
+      } else {
+        button.style.display = 'none';
+        const el = document.getElementById('codeInput');
+        el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 260, iterations: 1 });
+      }
+    }
     document.getElementById('codeInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); checkCode(); } });
     document.getElementById('unlockButton').addEventListener('click', function() {
       launchGame('secret');
