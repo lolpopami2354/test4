@@ -7,7 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg-mid:#0b0c2a;--accent:#00ffff;--panel:#1a1a3d;--muted:#cfc6ff}
-    html,body{height:100%;margin:0;padding:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+    /* Ensure page only creates a single vertical scroll (no extra horizontal overflow) */
+    html,body{height:100%;margin:0;padding:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;
       background:radial-gradient(ellipse at center,var(--bg-mid) 0%,#000 100%),linear-gradient(180deg, rgba(255,255,255,0.02) 0, transparent 100%);
       color:#fff;font-family:'Segoe UI',system-ui,-apple-system,"Orbitron",sans-serif;}
     .container{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding:40px 20px;max-width:1200px;margin:0 auto}
@@ -58,15 +59,26 @@
       box-shadow:none !important;
       z-index:99999 !important;
     }
-
-    /* Some browsers put the element itself into fullscreen, others put a parent — cover both */
     :fullscreen, :-webkit-full-screen, :-ms-fullscreen { background: #000; }
 
-    .stars,.stars2,.nebula{position:fixed;top:0;left:0;width:200%;height:200%;pointer-events:none;z-index:0;transform:translate(-25%,-25%);mix-blend-mode:screen}
-    .stars::after{content:"";position:absolute;width:2px;height:2px;background:white;box-shadow:50px 100px white,200px 300px white,400px 150px white,600px 250px white,800px 100px white;animation:twinkle 2.5s infinite ease-in-out}
-    .stars2::after{content:"";position:absolute;width:1px;height:1px;background:#aaf0ff;box-shadow:120px 80px #aaf0ff,320px 240px #aaf0ff;opacity:0.6;animation:twinkle2 3.5s infinite ease-in-out}
+    /* Fix: make decorative star/nebula layers cover viewport without expanding document size */
+    .stars, .stars2, .nebula {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100vw;
+      height:100vh;
+      pointer-events:none;
+      z-index:0;
+      transform:none;
+      overflow:hidden;
+      mix-blend-mode:screen;
+    }
+    .stars::after{content:"";position:absolute;left:0;top:0;width:2px;height:2px;background:white;box-shadow:50px 100px white,200px 300px white,400px 150px white,600px 250px white,800px 100px white;animation:twinkle 2.5s infinite ease-in-out}
+    .stars2::after{content:"";position:absolute;left:0;top:0;width:1px;height:1px;background:#aaf0ff;box-shadow:120px 80px #aaf0ff,320px 240px #aaf0ff;opacity:0.6;animation:twinkle2 3.5s infinite ease-in-out}
     @keyframes twinkle{0%,100%{opacity:.9}50%{opacity:.3}} @keyframes twinkle2{0%,100%{opacity:.6}50%{opacity:.2}}
     .nebula{background:radial-gradient(600px 300px at 10% 10%, rgba(0,200,255,0.06), transparent 10%),radial-gradient(500px 260px at 80% 70%, rgba(180,0,255,0.04), transparent 8%);opacity:.9;mix-blend-mode:overlay}
+
     .shooting-star{pointer-events:none;z-index:0;border-radius:2px;position:absolute;display:block}
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:20}
     .modal{background:linear-gradient(180deg,rgba(10,12,30,0.96),rgba(14,10,30,0.95));padding:18px;border-radius:12px;border:1px solid rgba(0,255,255,0.06);width:360px;max-width:96%;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
@@ -75,7 +87,14 @@
     .modal .modal-actions{Display:flex;gap:8px;justify-content:flex-end}
     .admin-note{font-size:13px;color:var(--muted);font-family:'Orbitron'}
     @media(max-width:900px){ .admin-panel{right:10px;left:10px;width:auto} iframe{height:80vh} }
-    </style>
+
+    /* search results styles */
+    .search-result { display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03) }
+    .search-result .meta { display:flex;flex-direction:column;gap:4px; }
+    .search-result .meta .id { font-size:12px;color:rgba(207,198,255,0.7) }
+    .search-result .actions { display:flex;gap:8px;align-items:center }
+    .search-empty { color:var(--muted);font-size:14px;padding:8px }
+  </style>
 </head>
 <body>
   <div class="stars"></div><div class="stars2"></div><div class="nebula"></div>
@@ -169,6 +188,17 @@
 
   <div class="container">
     <h1 class="site-title">WELCOME to Bubba's Gramama</h1>
+
+    <!-- Search bar (inserted under site title) -->
+    <div style="width:100%;max-width:760px;margin:12px 0;display:flex;flex-direction:column;gap:8px;align-items:center">
+      <div class="search-row" style="width:100%;display:flex;gap:8px;align-items:center">
+        <input id="gameSearchInput" type="search" placeholder="Search games by name or id (try: drift, hide, minecraft) — 'secret' is hidden" 
+               aria-label="Search games" style="flex:1;padding:10px 12px;border-radius:8px;border:none;background:var(--panel);color:var(--accent);font-family:'Orbitron';font-size:15px" />
+        <button id="gameSearchClear" class="top-btn" style="padding:10px 12px" title="Clear search">✖</button>
+      </div>
+      <div id="searchResults" aria-live="polite" style="width:100%;max-height:220px;overflow:auto;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03)"></div>
+    </div>
+
     <img class="gif" src="https://media1.tenor.com/m/0IixRqy4QoEAAAAC/a-fart-fart.gif" alt="gif" style="max-width:90%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6)">
     <div class="access-panel" aria-label="Galactic access panel" style="width:100%;max-width:760px;margin:18px 0;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(10,12,30,0.6),rgba(14,10,30,0.35));border:1px solid rgba(0,255,255,0.06);display:flex;flex-direction:column;align-items:center;gap:12px">
       <h3>Enter Access Code</h3>
@@ -1187,6 +1217,152 @@
 
     // render custom games initially (only non-admin ones or admin-only if already admin)
     renderCustomGames();
+
+    /* ---------- Game search (live) ---------- */
+    (function(){
+      const EXCLUDE_IDS = ['secret']; // always exclude secret
+      const searchInput = document.getElementById('gameSearchInput');
+      const searchClear = document.getElementById('gameSearchClear');
+      const resultsEl = document.getElementById('searchResults');
+
+      // Build an index of available games from #staticGames DOM + customGames; respects adminOnly and excludes EXCLUDE_IDS
+      function buildGameIndex() {
+        const list = [];
+        // Static games: read DOM blocks
+        document.querySelectorAll('#staticGames .game-block').forEach(block => {
+          const h = block.querySelector('h2');
+          const btn = block.querySelector('button.play-btn');
+          let name = h ? h.textContent.trim() : '';
+          // attempt to parse id from onclick attribute eg: launchGame('drivemad')
+          let id = null;
+          if (btn && btn.getAttribute) {
+            const onclick = btn.getAttribute('onclick') || '';
+            const m = onclick.match(/launchGame\(['"](.+?)['"]\)/);
+            if (m) id = m[1];
+          }
+          // fallback: use lowercased name without spaces as id
+          if (!id) id = name.toLowerCase().replace(/\s+/g,'-');
+          if (EXCLUDE_IDS.includes(id)) return;
+          list.push({ id, name, shopProtected: false, adminOnly: false, source: 'static' });
+        });
+
+        // Custom games (admin-managed)
+        const customs = loadCustomGames();
+        const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+        customs.forEach(g => {
+          if (!g || !g.id) return;
+          if (EXCLUDE_IDS.includes(String(g.id))) return; // skip secret
+          // only include adminOnly games if admin
+          if (g.adminOnly && !isAdmin) return;
+          list.push({
+            id: String(g.id),
+            name: g.name || String(g.id),
+            url: g.url || '',
+            shopProtected: !!g.shopProtected,
+            cost: Number(g.cost || 0),
+            adminOnly: !!g.adminOnly,
+            source: 'custom'
+          });
+        });
+
+        return list;
+      }
+
+      // Escape HTML helper
+      function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+      // Render results given a query
+      function renderSearchResults(query) {
+        const q = (query || '').trim().toLowerCase();
+        const idx = buildGameIndex();
+        if (!q) {
+          resultsEl.innerHTML = '<div class="search-empty">Type to search games by name or id. Results show playable games (secret hidden).</div>';
+          return;
+        }
+        const matches = idx.filter(g => (g.name && g.name.toLowerCase().includes(q)) || (g.id && g.id.toLowerCase().includes(q)));
+        if (!matches.length) {
+          resultsEl.innerHTML = `<div class="search-empty">No games match "<strong>${esc(query)}</strong>".</div>`;
+          return;
+        }
+        // create result nodes
+        resultsEl.innerHTML = '';
+        matches.forEach((g) => {
+          const wrap = document.createElement('div');
+          wrap.className = 'search-result';
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const title = document.createElement('div');
+          title.innerHTML = `<strong>${esc(g.name)}</strong>`;
+          const sub = document.createElement('div');
+          sub.className = 'id';
+          sub.textContent = `id: ${g.id} ${g.source === 'custom' ? '· custom' : ''}${g.shopProtected ? ` · cost: ${g.cost||'?' }🪙` : ''}${g.adminOnly ? ' · admin-only' : ''}`;
+          meta.appendChild(title);
+          meta.appendChild(sub);
+
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+          const playBtn = document.createElement('button');
+          playBtn.className = 'play-btn';
+          playBtn.textContent = g.shopProtected && !ownedGames[g.id] ? 'Locked' : 'Play';
+          playBtn.title = g.shopProtected && !ownedGames[g.id] ? 'Buy to play' : 'Open game';
+          playBtn.onclick = function(){
+            // if locked and not owned, show buy flow
+            if (g.shopProtected && !ownedGames[g.id]) {
+              const buy = confirm(`"${g.name}" costs ${g.cost}🪙 — buy now?`);
+              if (buy) buyGame(g.id, Number(g.cost || 0));
+              renderSearchResults(searchInput.value);
+              return;
+            }
+            // if custom and has url but locked to admin? launchGame handles protections
+            launchGame(g.id);
+          };
+
+          actions.appendChild(playBtn);
+
+          // if shop protected and not owned, show buy button
+          if (g.shopProtected && !ownedGames[g.id]) {
+            const buyBtn = document.createElement('button');
+            buyBtn.className = 'buy-button';
+            buyBtn.textContent = `Buy ${g.cost || '?'}🪙`;
+            buyBtn.onclick = function(){ buyGame(g.id, Number(g.cost || 0)); renderSearchResults(searchInput.value); };
+            actions.appendChild(buyBtn);
+          }
+
+          wrap.appendChild(meta);
+          wrap.appendChild(actions);
+          resultsEl.appendChild(wrap);
+        });
+      }
+
+      // Input listeners
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          renderSearchResults(e.target.value);
+        });
+        searchInput.addEventListener('keydown', (e) => {
+          // Enter: auto-play first match if present
+          if (e.key === 'Enter') {
+            const q = searchInput.value.trim();
+            const idx = buildGameIndex().filter(g => (g.name||'').toLowerCase().includes(q.toLowerCase()) || (g.id||'').toLowerCase().includes(q.toLowerCase()));
+            if (idx.length) {
+              const first = idx[0];
+              if (first.shopProtected && !ownedGames[first.id]) {
+                if (confirm(`${first.name} costs ${first.cost}🪙. Buy?`)) buyGame(first.id, Number(first.cost||0));
+                renderSearchResults(searchInput.value);
+              } else {
+                launchGame(first.id);
+              }
+            }
+          }
+        });
+        // Clear button
+        if (searchClear) {
+          searchClear.addEventListener('click', () => { searchInput.value = ''; renderSearchResults(''); searchInput.focus(); });
+        }
+        // initial placeholder state
+        renderSearchResults('');
+      }
+    })();
   </script>
 </body>
 </html>
