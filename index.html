@@ -211,6 +211,7 @@
 
     <!-- games -->
     <div id="staticGames">
+      <div class="game-block"><h2>Lunar Browser</h2><button class="play-btn" onclick="launchGame('lunar')">Open Lunar Browser</button></div>
       <div class="game-block"><h2>10 Minutes Till Dawn</h2><button class="play-btn" onclick="launchGame('10mTD')">Play 10 Minutes Till Dawn</button></div>
       <div class="game-block"><h2>1v1 LOL</h2><button class="play-btn" onclick="launchGame('1v1L')">Play 1v1 LOL</button></div>
       <div class="game-block"><h2>Time Shooter</h2><button class="play-btn" onclick="launchGame('TS')">Play Time Shooter</button></div>
@@ -265,6 +266,7 @@
 
     /* ---------- state & helpers ---------- */
     const gameURLs = {
+      'Lunar': "https://2.lunar.desmos.lol.cdn.cloudflare.net/",
       '10mTD': "https://lolpopami2354.github.io/10mTD",
       '1v1L': "https://lolpopami2354.github.io/1v1L",
       'TS': "https://lolpopami2354.github.io/timeShooter",
